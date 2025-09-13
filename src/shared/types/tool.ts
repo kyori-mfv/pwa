@@ -9,14 +9,26 @@ export interface ToolMetadata {
   icon?: string;
 }
 
+export interface ToolComponentProps {
+  instanceId: string;
+}
+
 export interface ToolPlugin {
   id: string;
   metadata: ToolMetadata;
-  component: React.ComponentType;
+  component: React.ComponentType<ToolComponentProps>;
 }
 
 export interface ToolInstance {
   id: string;
   plugin: ToolPlugin;
   active: boolean;
+  state?: Record<string, unknown>;
+  lastAccessed?: number;
+}
+
+export interface ToolStateManager {
+  getState(instanceId: string): Record<string, unknown> | undefined;
+  setState(instanceId: string, state: Record<string, unknown>): void;
+  clearState(instanceId: string): void;
 }

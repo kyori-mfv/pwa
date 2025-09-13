@@ -9,6 +9,8 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { useToolState } from "@/shared/hooks/use-tool-state";
+import type { ToolComponentProps } from "@/shared/types/tool";
 import { AlertCircle, CheckCircle, Copy, Redo, Undo } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
@@ -34,13 +36,26 @@ interface ValidationResult {
   lineNumber?: number;
 }
 
-export const JsonFormatterComponent: React.FC = () => {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [selectedStrategy, setSelectedStrategy] = useState<FormattingStrategy>(strategies[0]);
-  const [validation, setValidation] = useState<ValidationResult | null>(null);
+interface JsonFormatterState extends Record<string, unknown> {
+  input: string;
+  output: string;
+  selectedStrategyName: string;
+  validation: ValidationResult | null;
+}
+
+export const JsonFormatterComponent: React.FC<ToolComponentProps> = ({ instanceId }) => {
+  const [toolState, setToolState] = useToolState<JsonFormatterState>(instanceId, {
+    input: "",
+    output: "",
+    selectedStrategyName: strategies[0].name,
+    validation: null,
+  });
+
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+
+  const selectedStrategy =
+    strategies.find((s) => s.name === toolState.selectedStrategyName) || strategies[0];
 
   const updateUndoRedoState = () => {
     setCanUndo(commandManager.canUndo());
@@ -48,44 +63,39 @@ export const JsonFormatterComponent: React.FC = () => {
   };
 
   const handleFormat = async () => {
-    if (!input.trim()) return;
+    if (!toolState.input.trim()) return;
 
     const command = new FormatCommand({
-      input,
+      input: toolState.input,
       strategy: selectedStrategy,
       onResult: (result) => {
-        setOutput(result);
-        setValidation(null);
+        setToolState({ output: result, validation: null });
       },
       onUndo: (previousInput, previousOutput) => {
-        setInput(previousInput);
-        setOutput(previousOutput);
-        setValidation(null);
+        setToolState({ input: previousInput, output: previousOutput, validation: null });
       },
       onRedo: (redoInput, redoOutput) => {
-        setInput(redoInput);
-        setOutput(redoOutput);
-        setValidation(null);
+        setToolState({ input: redoInput, output: redoOutput, validation: null });
       },
     });
 
     // Store current output state before executing
-    command.setPreviousOutput(output);
+    command.setPreviousOutput(toolState.output);
 
     const result = await commandManager.executeCommand(command);
     if (!result.success && result.error) {
-      setValidation({ valid: false, error: result.error });
+      setToolState({ validation: { valid: false, error: result.error } });
     }
     updateUndoRedoState();
   };
 
   const handleValidate = async () => {
-    if (!input.trim()) return;
+    if (!toolState.input.trim()) return;
 
     const command = new ValidateCommand({
-      input,
+      input: toolState.input,
       onResult: (result) => {
-        setValidation(result);
+        setToolState({ validation: result });
       },
     });
 
@@ -103,15 +113,13 @@ export const JsonFormatterComponent: React.FC = () => {
   };
 
   const handleCopy = async () => {
-    if (output) {
-      await navigator.clipboard.writeText(output);
+    if (toolState.output) {
+      await navigator.clipboard.writeText(toolState.output);
     }
   };
 
   const handleClear = () => {
-    setInput("");
-    setOutput("");
-    setValidation(null);
+    setToolState({ input: "", output: "", validation: null });
   };
 
   return (
@@ -150,33 +158,35 @@ export const JsonFormatterComponent: React.FC = () => {
           <CardContent>
             <Textarea
               placeholder="Paste your JSON here..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
+              value={toolState.input}
+              onChange={(e) => setToolState({ input: e.target.value })}
               className="min-h-[400px] font-mono text-sm"
             />
 
-            {validation && (
+            {toolState.validation && (
               <div
                 className={`mt-4 flex items-start gap-2 p-3 rounded-md ${
-                  validation.valid
+                  toolState.validation.valid
                     ? "bg-green-50 text-green-800 border border-green-200"
                     : "bg-red-50 text-red-800 border border-red-200"
                 }`}
               >
-                {validation.valid ? (
+                {toolState.validation.valid ? (
                   <CheckCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 ) : (
                   <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 )}
                 <div className="text-sm">
-                  {validation.valid ? (
+                  {toolState.validation.valid ? (
                     "Valid JSON"
                   ) : (
                     <div>
                       <div className="font-medium">Invalid JSON</div>
-                      {validation.error && <div className="mt-1">{validation.error}</div>}
-                      {validation.lineNumber && (
-                        <div className="mt-1">Line: {validation.lineNumber}</div>
+                      {toolState.validation.error && (
+                        <div className="mt-1">{toolState.validation.error}</div>
+                      )}
+                      {toolState.validation.lineNumber && (
+                        <div className="mt-1">Line: {toolState.validation.lineNumber}</div>
                       )}
                     </div>
                   )}
@@ -195,8 +205,7 @@ export const JsonFormatterComponent: React.FC = () => {
                 <Select
                   value={selectedStrategy.name}
                   onValueChange={(value) => {
-                    const strategy = strategies.find((s) => s.name === value);
-                    if (strategy) setSelectedStrategy(strategy);
+                    setToolState({ selectedStrategyName: value });
                   }}
                 >
                   <SelectTrigger className="w-32">
@@ -211,7 +220,12 @@ export const JsonFormatterComponent: React.FC = () => {
                   </SelectContent>
                 </Select>
                 <Button onClick={handleFormat}>Format</Button>
-                <Button variant="outline" size="sm" onClick={handleCopy} disabled={!output}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopy}
+                  disabled={!toolState.output}
+                >
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
@@ -220,7 +234,7 @@ export const JsonFormatterComponent: React.FC = () => {
           <CardContent>
             <Textarea
               placeholder="Formatted JSON will appear here..."
-              value={output}
+              value={toolState.output}
               readOnly
               className="min-h-[400px] font-mono text-sm bg-muted/50"
             />

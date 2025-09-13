@@ -173,10 +173,11 @@ Analyze all tools and generate maintenance overview
 ```
 
 ## Current Status
-- **Active Tools**: [none yet]
+- **Active Tools**: JSON Formatter (with state persistence)
 - **In Development**: [none]
+- **Architecture Features**: ✅ Instance state persistence, ✅ Multi-instance support
 - **Known Issues**: [none]
-- **Last Modified**: Initial setup
+- **Last Modified**: State persistence implementation complete
 
 ## Efficient Development Workflows
 
@@ -267,12 +268,14 @@ After completing ANY task, Claude MUST:
 
 ## Key Files for Context
 - `README.md` - Project overview & Claude Code AI integration guide
-- `src/core/registry/tool-registry.ts` - Plugin system core
+- `src/core/registry/tool-registry.ts` - Plugin system core + state management
 - `src/core/commands/command-manager.ts` - Command pattern hub
 - `src/core/events/event-bus.ts` - Observer pattern implementation
-- `src/shared/types/tool-registry.ts` - Tool interface definitions
-- `src/app/store/tools-store.ts` - Tool registration
-- `src/tools/_template/` - Pattern-based template
+- `src/shared/types/tool.ts` - Tool interface definitions + state types
+- `src/shared/hooks/use-tool-state.ts` - Instance state persistence hook
+- `src/app/store/tools-store.ts` - Tool registration + state coordination
+- `src/tools/json-formatter/` - Reference implementation with state persistence
 - `docs/development-plan.md` - Complete development roadmap
 - `docs/design-patterns.md` - Architecture patterns overview
+- `docs/instance-state-management.md` - State re-serving implementation guide
 - `docs/coding-conventions.md` - Code style and conventions

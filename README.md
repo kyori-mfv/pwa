@@ -17,6 +17,8 @@ This project is a comprehensive developer tools platform featuring:
 
 ### 🛠️ Developer Tools
 - **JSON Formatter**: ✅ Pretty-print, minify, validate with 4 formatting strategies and undo/redo
+- **Multi-Instance Support**: ✅ Work on multiple tasks simultaneously with independent state
+- **State Persistence**: ✅ Never lose work when switching between tools - state automatically re-served
 - **JSON Compare**: 🔄 Visual diff with highlighting and merge options (planned)
 - **Text Compare**: 🔄 Line/character/word-level comparison algorithms (planned)
 - **SQL Formatter**: 🔄 Support for MySQL, PostgreSQL, SQLite dialects (planned)
@@ -28,6 +30,7 @@ This project is a comprehensive developer tools platform featuring:
 - **Strategy Pattern**: Multiple algorithms per tool with runtime switching
 - **Observer Pattern**: Inter-tool communication and workflow automation
 - **Composite Pattern**: Flexible, reusable UI components
+- **State Management**: ✅ Instance state persistence with automatic re-serving
 
 ### 💻 Developer Experience
 - **AI-Optimized**: Built for efficient development with Claude Code AI
@@ -221,6 +224,7 @@ pwa/
 - **Strategy Pattern**: Multiple algorithms per tool
 - **Observer Pattern**: Tool communication and workflows  
 - **Composite Pattern**: Flexible UI component composition
+- **State Management Pattern**: Instance state persistence with automatic re-serving
 
 ### Key Principles
 - **Separation of Concerns**: Clear boundaries between layers

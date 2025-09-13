@@ -8,9 +8,9 @@ export const MainContent: React.FC = () => {
   const CurrentToolComponent = currentToolInstance?.plugin.component;
   return (
     <main className="flex-1 overflow-auto">
-      {CurrentToolComponent ? (
+      {CurrentToolComponent && currentToolInstance ? (
         <div className="p-6">
-          <CurrentToolComponent key={currentToolInstance.id} />
+          <CurrentToolComponent key={currentToolInstance.id} instanceId={currentToolInstance.id} />
         </div>
       ) : (
         <div className="flex items-center justify-center h-full">

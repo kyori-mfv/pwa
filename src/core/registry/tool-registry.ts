@@ -1,6 +1,6 @@
-import type { ToolInstance, ToolPlugin } from "@/shared/types/tool";
+import type { ToolInstance, ToolPlugin, ToolStateManager } from "@/shared/types/tool";
 
-export class ToolRegistry {
+export class ToolRegistry implements ToolStateManager {
   private plugins = new Map<string, ToolPlugin>();
   private instances = new Map<string, ToolInstance>();
 
@@ -24,6 +24,8 @@ export class ToolRegistry {
       id: `${pluginId}-${Date.now()}`,
       plugin,
       active: true,
+      state: {},
+      lastAccessed: Date.now(),
     };
 
     this.instances.set(instance.id, instance);
@@ -36,6 +38,31 @@ export class ToolRegistry {
 
   getInstances(): ToolInstance[] {
     return Array.from(this.instances.values());
+  }
+
+  getInstance(instanceId: string): ToolInstance | undefined {
+    return this.instances.get(instanceId);
+  }
+
+  // ToolStateManager implementation
+  getState(instanceId: string): Record<string, unknown> | undefined {
+    const instance = this.instances.get(instanceId);
+    return instance?.state;
+  }
+
+  setState(instanceId: string, state: Record<string, unknown>): void {
+    const instance = this.instances.get(instanceId);
+    if (instance) {
+      instance.state = { ...state };
+      instance.lastAccessed = Date.now();
+    }
+  }
+
+  clearState(instanceId: string): void {
+    const instance = this.instances.get(instanceId);
+    if (instance) {
+      instance.state = {};
+    }
   }
 }
 

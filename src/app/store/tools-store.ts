@@ -11,6 +11,8 @@ interface ToolsState {
   closeTool: (instanceId: string) => void;
   setCurrentTool: (instanceId: string | null) => void;
   getAvailableTools: () => ToolPlugin[];
+  saveToolState: (instanceId: string, state: Record<string, unknown>) => void;
+  loadToolState: (instanceId: string) => Record<string, unknown> | undefined;
 }
 
 export const useToolsStore = create<ToolsState>((set) => ({
@@ -41,5 +43,19 @@ export const useToolsStore = create<ToolsState>((set) => ({
 
   getAvailableTools: () => {
     return toolRegistry.getAllPlugins();
+  },
+
+  saveToolState: (instanceId: string, state: Record<string, unknown>) => {
+    toolRegistry.setState(instanceId, state);
+    // Update the store to trigger re-renders with latest instance state
+    set((prevState) => ({
+      activeTools: prevState.activeTools.map((tool) =>
+        tool.id === instanceId ? { ...tool, state, lastAccessed: Date.now() } : tool
+      ),
+    }));
+  },
+
+  loadToolState: (instanceId: string) => {
+    return toolRegistry.getState(instanceId);
   },
 }));

@@ -3,13 +3,14 @@
 ## Architecture Strategy
 
 ### Core Pattern Selection
-We use **5 key patterns** to build a scalable, maintainable developer tools platform:
+We use **6 key patterns** to build a scalable, maintainable developer tools platform:
 
 1. **Plugin Architecture** - Tool modularity
 2. **Command Pattern** - Undo/redo operations  
 3. **Strategy Pattern** - Algorithm variations
 4. **Observer Pattern** - Tool communication
 5. **Composite Pattern** - Complex UI structures
+6. **State Management Pattern** - Instance state persistence & re-serving
 
 ## Pattern Implementation Strategy
 
@@ -116,16 +117,43 @@ eventBus.subscribe('json-formatted', handleFormattedJSON)
 
 **When to use**: For complex tool UIs with multiple sections
 
+### 6. State Management Pattern
+**Purpose**: Each tool instance maintains persistent state that survives navigation
+
+**Implementation**:
+```typescript
+// Each ToolInstance has persistent state storage
+interface ToolInstance {
+  id: string;
+  plugin: ToolPlugin;
+  active: boolean;
+  state?: Record<string, unknown>;  // Persistent state
+  lastAccessed?: number;           // Access tracking
+}
+
+// useToolState hook for React components
+const [state, setState] = useToolState<MyState>(instanceId, initialState);
+```
+
+**Benefits**:
+- ✅ **No data loss** - State preserved when switching tools
+- ✅ **Multi-instance support** - Each instance has independent state
+- ✅ **Auto re-serving** - State automatically restored when returning to tool
+- ✅ **Developer-friendly** - Drop-in replacement for useState
+
+**When to use**: For any tool that should preserve user input and state
+
 ## Implementation Priority
 
-### Phase 1: Foundation (Week 1-2)
-1. **Plugin Registry System** - Core architecture
-2. **Basic Command Manager** - Undo/redo foundation
-3. **Event Bus** - Tool communication
+### Phase 1: Foundation (Week 1-2) ✅ COMPLETE
+1. **Plugin Registry System** - Core architecture ✅
+2. **Basic Command Manager** - Undo/redo foundation ✅
+3. **Event Bus** - Tool communication ✅
+4. **State Management System** - Instance state persistence ✅
 
 ### Phase 2: Tool Patterns (Week 3-4)
-1. **Strategy Managers** - Algorithm switching
-2. **Composite Components** - Reusable UI parts
+1. **Strategy Managers** - Algorithm switching ✅
+2. **Composite Components** - Reusable UI parts ✅
 3. **Tool Templates** - Pattern-based scaffolding
 
 ### Phase 3: Advanced Features (Week 5-6)
@@ -141,6 +169,7 @@ eventBus.subscribe('json-formatted', handleFormattedJSON)
 - **Strategy**: Pretty-print vs minify algorithms
 - **Observer**: Share formatted JSON with other tools
 - **Composite**: Input/output/options panels
+- **State Management**: Preserves input, output, selected strategy, validation results
 
 ### Text Compare
 - **Plugin**: Self-contained diff engine
