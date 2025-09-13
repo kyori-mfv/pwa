@@ -304,7 +304,7 @@ export const jsonFormatterTool: ToolPlugin = {
 /add-strategy text-utils base64-encode
 ```
 
-### 4.3 SQL Tools
+### 4.3 Database Tools
 ```bash
 # Week 6: SQL Formatter
 /create-tool sql-formatter sql command,strategy
@@ -314,6 +314,17 @@ export const jsonFormatterTool: ToolPlugin = {
 /add-command sql-formatter format
 /add-command sql-formatter validate
 /add-command sql-formatter optimize
+
+# Week 4.3: IndexedDB CRUD Tool (Next Priority - Learning-focused)
+/create-tool indexeddb-crud database command,strategy,observer
+/add-strategy indexeddb-crud standard-crud
+/add-strategy indexeddb-crud transaction-manager
+/add-strategy indexeddb-crud query-builder
+/add-command indexeddb-crud create-database
+/add-command indexeddb-crud manage-schema
+/add-command indexeddb-crud crud-operations
+/add-command indexeddb-crud query-data
+/add-observer indexeddb-crud performance-monitor
 ```
 
 ## Phase 5: Advanced Features (Week 7-8)
@@ -405,7 +416,8 @@ pnpm test      # Unit tests
 - ✅ Strategy switching working
 
 ### Week 4-6: Core Tools
-- ✅ 5+ tools implemented with consistent patterns
+- ✅ 6+ tools implemented with consistent patterns
+- ✅ IndexedDB CRUD tool for database learning
 - ✅ Tool communication via events working
 - ✅ Shared components reused across tools
 - ✅ 90%+ test coverage

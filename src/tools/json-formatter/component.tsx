@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -164,11 +165,13 @@ export const JsonFormatterComponent: React.FC<ToolComponentProps> = ({ instanceI
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectGroup>
                     {strategies.map((strategy) => (
                       <SelectItem key={strategy.name} value={strategy.name}>
                         {strategy.name}
-                      </SelectItem>
-                    ))}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <Button onClick={handleFormat}>Format</Button>

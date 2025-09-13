@@ -8,7 +8,7 @@ export const ToolSidebar: React.FC = () => {
   const availableTools = getAvailableTools();
 
   return (
-    <aside className="w-64 border-r bg-card">
+    <aside className="w-64 border-r border-border bg-sidebar">
       <div className="p-4">
         <h2 className="font-semibold mb-4">Available Tools</h2>
         <Separator className="mb-4" />
@@ -16,7 +16,7 @@ export const ToolSidebar: React.FC = () => {
           {availableTools.map((tool) => (
             <Card
               key={tool.id}
-              className="p-0 cursor-pointer hover:bg-muted/50 transition-colors"
+              className="p-0 cursor-pointer transition-colors hover:bg-sidebar-accent"
               onClick={() => openTool(tool.id)}
             >
               <div className="p-3">
