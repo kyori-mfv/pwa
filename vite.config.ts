@@ -1,4 +1,6 @@
-import { resolve } from "path";
+/// <reference types="vite-plugin-pwa/client" />
+
+import { URL, fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -8,10 +10,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      devOptions: {
+        enabled: true,
+      },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
       },
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+      includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
         name: "Developer Tools PWA",
         short_name: "DevTools",
@@ -38,16 +43,16 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
-      "@/components": resolve(__dirname, "./src/shared/components"),
-      "@/ui": resolve(__dirname, "./src/shared/components/ui"),
-      "@/utils": resolve(__dirname, "./src/shared/utils"),
-      "@/hooks": resolve(__dirname, "./src/shared/hooks"),
-      "@/types": resolve(__dirname, "./src/shared/types"),
-      "@/services": resolve(__dirname, "./src/shared/services"),
-      "@/tools": resolve(__dirname, "./src/tools"),
-      "@/core": resolve(__dirname, "./src/core"),
-      "@/app": resolve(__dirname, "./src/app"),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@/components": fileURLToPath(new URL("./src/shared/components", import.meta.url)),
+      "@/ui": fileURLToPath(new URL("./src/shared/components/ui", import.meta.url)),
+      "@/utils": fileURLToPath(new URL("./src/shared/utils", import.meta.url)),
+      "@/hooks": fileURLToPath(new URL("./src/shared/hooks", import.meta.url)),
+      "@/types": fileURLToPath(new URL("./src/shared/types", import.meta.url)),
+      "@/services": fileURLToPath(new URL("./src/shared/services", import.meta.url)),
+      "@/tools": fileURLToPath(new URL("./src/tools", import.meta.url)),
+      "@/core": fileURLToPath(new URL("./src/core", import.meta.url)),
+      "@/app": fileURLToPath(new URL("./src/app", import.meta.url)),
     },
   },
 });

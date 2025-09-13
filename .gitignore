@@ -5,6 +5,7 @@ pnpm-lock.yaml
 
 # Build outputs
 dist/
+dev-dist/
 build/
 .vite/
 .rollup.cache/
