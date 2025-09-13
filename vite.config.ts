@@ -39,6 +39,15 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+      "@/components": resolve(__dirname, "./src/shared/components"),
+      "@/ui": resolve(__dirname, "./src/shared/components/ui"),
+      "@/utils": resolve(__dirname, "./src/shared/utils"),
+      "@/hooks": resolve(__dirname, "./src/shared/hooks"),
+      "@/types": resolve(__dirname, "./src/shared/types"),
+      "@/services": resolve(__dirname, "./src/shared/services"),
+      "@/tools": resolve(__dirname, "./src/tools"),
+      "@/core": resolve(__dirname, "./src/core"),
+      "@/app": resolve(__dirname, "./src/app"),
     },
   },
 });
