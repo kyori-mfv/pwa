@@ -3,14 +3,12 @@
 ## Architecture Strategy
 
 ### Core Pattern Selection
-We use **6 key patterns** to build a scalable, maintainable developer tools platform:
+We use **4 key patterns** to build a scalable, maintainable developer tools platform:
 
 1. **Plugin Architecture** - Tool modularity
-2. **Command Pattern** - Undo/redo operations  
-3. **Strategy Pattern** - Algorithm variations
-4. **Observer Pattern** - Tool communication
-5. **Composite Pattern** - Complex UI structures
-6. **State Management Pattern** - Instance state persistence & re-serving
+2. **Strategy Pattern** - Algorithm variations
+3. **Composite Pattern** - Complex UI structures
+4. **State Management Pattern** - Instance state persistence & re-serving
 
 ## Pattern Implementation Strategy
 
@@ -21,9 +19,8 @@ We use **6 key patterns** to build a scalable, maintainable developer tools plat
 ```
 src/tools/json-formatter/
 ├── index.ts           # Plugin registration
-├── json-formatter.tsx # Main component  
+├── component.tsx      # Main component  
 ├── strategies/        # Different algorithms
-├── commands/          # User actions
 └── components/        # UI pieces
 ```
 
@@ -35,30 +32,7 @@ src/tools/json-formatter/
 
 **When to use**: For any new developer tool
 
-### 2. Command Pattern
-**Purpose**: All user actions become undoable commands
-
-**Implementation**:
-```typescript
-interface Command {
-  execute(): Promise<Result>
-  undo(): Promise<void>
-  description: string
-}
-
-// Examples:
-// FormatJSONCommand, MinifyJSONCommand, CompareTextCommand
-```
-
-**Benefits**:
-- ✅ **Undo/Redo** - Better user experience
-- ✅ **Macro recording** - Automate workflows
-- ✅ **Action history** - Debug user interactions
-- ✅ **Consistent operations** - Standardized actions
-
-**When to use**: For any user action that changes data
-
-### 3. Strategy Pattern  
+### 2. Strategy Pattern  
 **Purpose**: Different algorithms for same operation
 
 **Implementation**:
@@ -80,27 +54,7 @@ interface ProcessingStrategy {
 
 **When to use**: When tool has multiple ways to process data
 
-### 4. Observer Pattern
-**Purpose**: Tools communicate through events
-
-**Implementation**:
-```typescript
-// JSON Formatter emits: 'json-formatted'
-// Text Compare listens: 'json-formatted' -> auto-import
-
-eventBus.emit('json-formatted', { data, source: 'json-formatter' })
-eventBus.subscribe('json-formatted', handleFormattedJSON)
-```
-
-**Benefits**:
-- ✅ **Tool integration** - Chain tool operations
-- ✅ **Loose coupling** - Tools don't depend on each other
-- ✅ **Workflow automation** - Auto-pass data between tools
-- ✅ **Real-time updates** - Live synchronization
-
-**When to use**: When tools need to share data or coordinate
-
-### 5. Composite Pattern
+### 3. Composite Pattern
 **Purpose**: Build complex UIs from simple components
 
 **Implementation**:
@@ -117,7 +71,7 @@ eventBus.subscribe('json-formatted', handleFormattedJSON)
 
 **When to use**: For complex tool UIs with multiple sections
 
-### 6. State Management Pattern
+### 4. State Management Pattern
 **Purpose**: Each tool instance maintains persistent state that survives navigation
 
 **Implementation**:
@@ -147,9 +101,7 @@ const [state, setState] = useToolState<MyState>(instanceId, initialState);
 
 ### Phase 1: Foundation (Week 1-2) ✅ COMPLETE
 1. **Plugin Registry System** - Core architecture ✅
-2. **Basic Command Manager** - Undo/redo foundation ✅
-3. **Event Bus** - Tool communication ✅
-4. **State Management System** - Instance state persistence ✅
+2. **State Management System** - Instance state persistence ✅
 
 ### Phase 2: Tool Patterns (Week 3-4)
 1. **Strategy Managers** - Algorithm switching ✅
@@ -157,32 +109,25 @@ const [state, setState] = useToolState<MyState>(instanceId, initialState);
 3. **Tool Templates** - Pattern-based scaffolding
 
 ### Phase 3: Advanced Features (Week 5-6)
-1. **Command History UI** - Visual undo/redo
-2. **Tool Workflows** - Multi-tool processes
-3. **Plugin Hot-reloading** - Development efficiency
+1. **Tool Templates** - Pattern-based scaffolding
+2. **Plugin Hot-reloading** - Development efficiency
 
 ## Pattern Benefits by Tool
 
 ### JSON Tools
 - **Plugin**: Isolated JSON processing
-- **Command**: Format, minify, validate actions
 - **Strategy**: Pretty-print vs minify algorithms
-- **Observer**: Share formatted JSON with other tools
 - **Composite**: Input/output/options panels
 - **State Management**: Preserves input, output, selected strategy, validation results
 
 ### Text Compare
 - **Plugin**: Self-contained diff engine
-- **Command**: Compare, merge, export actions  
 - **Strategy**: Line vs character vs word diff
-- **Observer**: Accept text from other tools
 - **Composite**: Side-by-side editor panels
 
 ### SQL Formatter
 - **Plugin**: Database-specific formatting
-- **Command**: Format, validate, optimize actions
 - **Strategy**: MySQL vs PostgreSQL vs SQLite
-- **Observer**: Import from text tools
 - **Composite**: Query editor + results + schema panels
 
 ## Development Workflow
@@ -190,14 +135,13 @@ const [state, setState] = useToolState<MyState>(instanceId, initialState);
 ### Adding New Tool
 ```bash
 /create-tool <name> <category> <patterns>
-# Generates: Plugin structure + Command classes + Strategy interfaces
+# Generates: Plugin structure + Strategy interfaces
 ```
 
 ### Adding Features
 ```bash
-/add-strategy <tool> <algorithm>    # New processing option
-/add-command <tool> <action>        # New user action  
-/wire-tools <tool1> <tool2>         # Connect via events
+/add-strategy <tool> <algorithm>    # New processing option  
+# Add more strategies as needed
 ```
 
 ### Quality Assurance

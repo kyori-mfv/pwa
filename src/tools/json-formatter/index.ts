@@ -20,5 +20,4 @@ toolRegistry.register(jsonFormatterPlugin);
 
 export { jsonFormatterPlugin };
 export * from "./component";
-export * from "./commands";
 export * from "./strategies";

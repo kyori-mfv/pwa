@@ -1,14 +1,14 @@
 # JSON Formatter Tool
 
-A comprehensive JSON formatting and validation tool with multiple formatting strategies and undo/redo support.
+A comprehensive JSON formatting and validation tool with multiple formatting strategies.
 
 ## Features
 
 - **4 Formatting Strategies**: Pretty (2-space), Compact (1-space), Minified, Tabs
 - **Real-time Validation**: Instant syntax checking with error details
-- **Undo/Redo Support**: Full command history
 - **Copy to Clipboard**: One-click output copying
 - **Responsive Design**: Works on desktop and mobile
+- **Instance State**: Preserves input and settings across navigation
 
 ## Quick Start
 
@@ -35,14 +35,14 @@ interface FormattingStrategy {
 - `MinifiedFormatStrategy` - No whitespace
 - `TabFormatStrategy` - Tab-based indentation
 
-### Command Pattern
-Operations with undo/redo support:
+### State Management
+Persistent tool state:
 ```typescript
-interface Command {
-  id: string;
-  description: string;
-  execute(): Promise<CommandResult>;
-  undo?(): Promise<void>;
+interface JsonFormatterState {
+  input: string;
+  output: string;
+  selectedStrategyName: string;
+  validation: ValidationResult | null;
 }
 ```
 
@@ -56,20 +56,17 @@ const strategy = new PrettyFormatStrategy();
 const formatted = strategy.format('{"name":"John","age":30}');
 ```
 
-### Command with Undo
+### Direct Formatting
 ```typescript
-import { FormatCommand } from "@/tools/json-formatter/commands";
-import { commandManager } from "@/core/commands/command-manager";
+import { PrettyFormatStrategy } from "@/tools/json-formatter/strategies";
 
-const command = new FormatCommand({
-  input: jsonString,
-  strategy: new PrettyFormatStrategy(),
-  onResult: (result) => console.log(result),
-  onUndo: (prev) => console.log("Undone"),
-  onRedo: (redo) => console.log("Redone")
-});
-
-await commandManager.executeCommand(command);
+const strategy = new PrettyFormatStrategy();
+try {
+  const formatted = strategy.format('{"name":"John","age":30}');
+  console.log(formatted);
+} catch (error) {
+  console.error("Invalid JSON:", error.message);
+}
 ```
 
 ## File Structure
@@ -79,9 +76,6 @@ src/tools/json-formatter/
 ├── README.md                 # This file
 ├── index.ts                  # Tool registration
 ├── component.tsx             # Main React component
-├── commands/
-│   ├── format-command.ts     # Format command
-│   └── validate-command.ts   # Validate command
 └── strategies/
     └── formatting-strategy.ts # All strategies
 ```
@@ -108,10 +102,12 @@ const strategy = new PrettyFormatStrategy();
 expect(strategy.format('{"test":true}')).toBe('{\n  "test": true\n}');
 
 // Test validation
-const command = new ValidateCommand({
-  input: '{"valid": true}',
-  onResult: (result) => expect(result.valid).toBe(true)
-});
+try {
+  JSON.parse('{"valid": true}');
+  console.log("Valid JSON");
+} catch (error) {
+  console.log("Invalid JSON");
+}
 ```
 
 ## Integration

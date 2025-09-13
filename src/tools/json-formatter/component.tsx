@@ -1,4 +1,3 @@
-import { commandManager } from "@/core/commands/command-manager";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import {
@@ -11,13 +10,10 @@ import {
 import { Textarea } from "@/shared/components/ui/textarea";
 import { useToolState } from "@/shared/hooks/use-tool-state";
 import type { ToolComponentProps } from "@/shared/types/tool";
-import { AlertCircle, CheckCircle, Copy, Redo, Undo } from "lucide-react";
+import { AlertCircle, CheckCircle, Copy } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
-import { FormatCommand, ValidateCommand } from "./commands";
 import {
   CompactFormatStrategy,
-  type FormattingStrategy,
   MinifiedFormatStrategy,
   PrettyFormatStrategy,
   TabFormatStrategy,
@@ -51,65 +47,31 @@ export const JsonFormatterComponent: React.FC<ToolComponentProps> = ({ instanceI
     validation: null,
   });
 
-  const [canUndo, setCanUndo] = useState(false);
-  const [canRedo, setCanRedo] = useState(false);
-
   const selectedStrategy =
     strategies.find((s) => s.name === toolState.selectedStrategyName) || strategies[0];
 
-  const updateUndoRedoState = () => {
-    setCanUndo(commandManager.canUndo());
-    setCanRedo(commandManager.canRedo());
-  };
-
-  const handleFormat = async () => {
+  const handleFormat = () => {
     if (!toolState.input.trim()) return;
 
-    const command = new FormatCommand({
-      input: toolState.input,
-      strategy: selectedStrategy,
-      onResult: (result) => {
-        setToolState({ output: result, validation: null });
-      },
-      onUndo: (previousInput, previousOutput) => {
-        setToolState({ input: previousInput, output: previousOutput, validation: null });
-      },
-      onRedo: (redoInput, redoOutput) => {
-        setToolState({ input: redoInput, output: redoOutput, validation: null });
-      },
-    });
-
-    // Store current output state before executing
-    command.setPreviousOutput(toolState.output);
-
-    const result = await commandManager.executeCommand(command);
-    if (!result.success && result.error) {
-      setToolState({ validation: { valid: false, error: result.error } });
+    try {
+      const result = selectedStrategy.format(toolState.input);
+      setToolState({ output: result, validation: null });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Invalid JSON format";
+      setToolState({ validation: { valid: false, error: errorMessage } });
     }
-    updateUndoRedoState();
   };
 
-  const handleValidate = async () => {
+  const handleValidate = () => {
     if (!toolState.input.trim()) return;
 
-    const command = new ValidateCommand({
-      input: toolState.input,
-      onResult: (result) => {
-        setToolState({ validation: result });
-      },
-    });
-
-    await commandManager.executeCommand(command);
-  };
-
-  const handleUndo = async () => {
-    await commandManager.undo();
-    updateUndoRedoState();
-  };
-
-  const handleRedo = async () => {
-    await commandManager.redo();
-    updateUndoRedoState();
+    try {
+      JSON.parse(toolState.input);
+      setToolState({ validation: { valid: true } });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Invalid JSON";
+      setToolState({ validation: { valid: false, error: errorMessage } });
+    }
   };
 
   const handleCopy = async () => {
@@ -124,19 +86,9 @@ export const JsonFormatterComponent: React.FC<ToolComponentProps> = ({ instanceI
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">JSON Formatter</h1>
-          <p className="text-muted-foreground">Format, validate, and beautify JSON data</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleUndo} disabled={!canUndo}>
-            <Undo className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleRedo} disabled={!canRedo}>
-            <Redo className="h-4 w-4" />
-          </Button>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold">JSON Formatter</h1>
+        <p className="text-muted-foreground">Format, validate, and beautify JSON data</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

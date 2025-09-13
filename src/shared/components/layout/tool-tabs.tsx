@@ -17,17 +17,14 @@ export const ToolTabs: React.FC = () => {
           className="relative pr-8"
         >
           {tool.plugin.metadata.name}
-          <Button
-            variant="ghost"
-            size="sm"
+
+          <X
+            className="h-3 w-3"
             onClick={(e) => {
               e.stopPropagation();
               closeTool(tool.id);
             }}
-            className="absolute right-1 top-1/2 -translate-y-1/2 h-4 w-4 p-0 hover:bg-destructive/20"
-          >
-            <X className="h-3 w-3" />
-          </Button>
+          />
         </Button>
       ))}
     </div>

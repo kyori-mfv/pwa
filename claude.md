@@ -79,7 +79,7 @@ Get next priority task based on development phase
 #### /create-tool <name> <category> [patterns]
 Create new tool with architectural patterns
 ```bash
-# Usage: /create-tool json-minifier json command,strategy
+# Usage: /create-tool json-minifier json strategy
 # Creates: Complete tool structure with patterns
 # Use: Starting new tool development
 ```
@@ -90,22 +90,6 @@ Add strategy pattern to existing tool
 # Usage: /add-strategy json-formatter pretty-print
 # Creates: Strategy implementation + UI integration
 # Use: Adding algorithm variations to tools
-```
-
-#### /add-command <tool> <command>
-Add command pattern to tool
-```bash
-# Usage: /add-command json-formatter format-compact
-# Creates: Command class with undo/redo
-# Use: Adding user actions to tools
-```
-
-#### /wire-tools <tool1> <tool2>
-Connect tools via event communication
-```bash
-# Usage: /wire-tools json-formatter text-compare
-# Creates: Event handlers for tool integration
-# Use: Creating tool workflows
 ```
 
 ### Quality Assurance Commands
@@ -121,7 +105,7 @@ Debug tool with pattern analysis
 #### /verify-pattern <tool> <pattern>
 Verify pattern implementation compliance
 ```bash
-# Usage: /verify-pattern json-formatter command
+# Usage: /verify-pattern json-formatter strategy
 # Checks: Pattern interfaces, implementations
 # Use: Ensuring architectural consistency
 ```
@@ -200,7 +184,7 @@ Analyze all tools and generate maintenance overview
 # Modify existing tool:
 /read-tool <tool-name>
 /context-quick add-feature
-/add-strategy <tool> <strategy>  OR  /add-command <tool> <command>
+/add-strategy <tool> <strategy>
 /document-tool <tool-name>
 /quick-verify
 
@@ -269,8 +253,7 @@ After completing ANY task, Claude MUST:
 ## Key Files for Context
 - `README.md` - Project overview & Claude Code AI integration guide
 - `src/core/registry/tool-registry.ts` - Plugin system core + state management
-- `src/core/commands/command-manager.ts` - Command pattern hub
-- `src/core/events/event-bus.ts` - Observer pattern implementation
+# Command pattern hub and event bus have been removed for simplicity
 - `src/shared/types/tool.ts` - Tool interface definitions + state types
 - `src/shared/hooks/use-tool-state.ts` - Instance state persistence hook
 - `src/app/store/tools-store.ts` - Tool registration + state coordination
