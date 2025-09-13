@@ -1,9 +1,12 @@
 /// <reference types="vite-plugin-pwa/client" />
 
+import path from "node:path";
 import { URL, fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
@@ -43,16 +46,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@/components": fileURLToPath(new URL("./src/shared/components", import.meta.url)),
-      "@/ui": fileURLToPath(new URL("./src/shared/components/ui", import.meta.url)),
-      "@/utils": fileURLToPath(new URL("./src/shared/utils", import.meta.url)),
-      "@/hooks": fileURLToPath(new URL("./src/shared/hooks", import.meta.url)),
-      "@/types": fileURLToPath(new URL("./src/shared/types", import.meta.url)),
-      "@/services": fileURLToPath(new URL("./src/shared/services", import.meta.url)),
-      "@/tools": fileURLToPath(new URL("./src/tools", import.meta.url)),
-      "@/core": fileURLToPath(new URL("./src/core", import.meta.url)),
-      "@/app": fileURLToPath(new URL("./src/app", import.meta.url)),
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      external: [],
     },
   },
 });
