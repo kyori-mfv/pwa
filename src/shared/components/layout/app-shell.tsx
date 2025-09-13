@@ -16,11 +16,11 @@ export const AppShell: React.FC = () => {
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex items-center justify-between p-4">
-          <h1 className="text-xl font-bold">Developer Tools PWA</h1>
+        <div className="flex items-center justify-between gap-10 p-4">
+          <h1 className="shrink-0 text-2xl font-bold">Developer Tools PWA</h1>
 
           {/* Tool Tabs */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {activeTools.map((tool) => (
               <Button
                 key={tool.id}

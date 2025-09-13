@@ -3,10 +3,13 @@
 ## Available Tools
 
 ### JSON Tools
-- **json-formatter**: Format, validate, and minify JSON data
-  - Features: Pretty print, minify, syntax validation, error highlighting
-  - Location: `src/tools/json-formatter/`
-  - Route: `/tools/json-formatter`
+- **json-formatter**: ✅ Format, validate, and minify JSON data
+  - **Status**: Ready - Fully implemented and tested
+  - **Features**: 4 formatting strategies (Pretty, Compact, Minified, Tabs), real-time validation, undo/redo support
+  - **Architecture**: Strategy Pattern + Command Pattern implementation
+  - **Location**: `src/tools/json-formatter/`
+  - **Documentation**: [README](../src/tools/json-formatter/README.md) | [API](./tools/json-formatter-api.md) | [Examples](./examples/json-formatter-examples.md) | [Architecture](./architecture/json-formatter-patterns.md)
+  - **Version**: 1.0.0
 
 - **json-compare**: Compare two JSON objects with diff visualization
   - Features: Side-by-side diff, highlight changes, export results

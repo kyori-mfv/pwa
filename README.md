@@ -16,11 +16,11 @@ This project is a comprehensive developer tools platform featuring:
 ## ✨ Key Features
 
 ### 🛠️ Developer Tools
-- **JSON Formatter**: Pretty-print, minify, validate, sort keys
-- **JSON Compare**: Visual diff with highlighting and merge options
-- **Text Compare**: Line/character/word-level comparison algorithms
-- **SQL Formatter**: Support for MySQL, PostgreSQL, SQLite dialects
-- **Extensible**: Easy to add new tools via plugin architecture
+- **JSON Formatter**: ✅ Pretty-print, minify, validate with 4 formatting strategies and undo/redo
+- **JSON Compare**: 🔄 Visual diff with highlighting and merge options (planned)
+- **Text Compare**: 🔄 Line/character/word-level comparison algorithms (planned)
+- **SQL Formatter**: 🔄 Support for MySQL, PostgreSQL, SQLite dialects (planned)
+- **Extensible**: ✅ Plugin-based architecture with Strategy and Command patterns
 
 ### 🏗️ Architecture Highlights
 - **Plugin System**: Each tool is a self-contained, hot-swappable plugin

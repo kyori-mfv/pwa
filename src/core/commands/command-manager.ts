@@ -36,6 +36,8 @@ class CommandManager {
 
     this.currentIndex++;
     const command = this.history[this.currentIndex];
+
+    // For redo, we need to re-execute the command to apply its effects
     const result = await command.execute();
 
     return result.success;

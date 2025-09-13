@@ -7,6 +7,9 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 
+// Register tools
+import "@/tools/json-formatter";
+
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
