@@ -154,12 +154,13 @@ Read and analyze existing tool structure and context
 ```
 
 #### /document-tool <tool-name>
-Generate comprehensive documentation for tool
+Generate simple documentation for tool
 ```bash
 # Usage: /document-tool json-formatter
-# Creates: README.md, API docs, usage examples, integration guide
+# Creates: Only README.md in tool directory (no other files)
 # Updates: docs/tools.md registry with current status
-# Use: Creating maintenance docs for future developers
+# Note: Single README.md file is sufficient - avoid creating multiple docs
+# Use: Creating concise docs for tool understanding and usage
 ```
 
 #### /analyze-tools

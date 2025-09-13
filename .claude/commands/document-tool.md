@@ -1,49 +1,39 @@
 ---
-description: Generate comprehensive documentation for tool
+description: Generate simple documentation for tool
 argument-hint: [tool-name]
 ---
 
-Generate comprehensive documentation for tool: **$1**
+Generate simple documentation for tool: **$1**
 
-**Documentation to Generate:**
-1. **README.md** - Main tool documentation
-2. **API Documentation** - Component interfaces and props
-3. **Usage Examples** - Code examples and common patterns
-4. **Integration Guide** - How to connect with other tools
-5. **Development Guide** - How to extend and modify the tool
+**Documentation to Create:**
+- **Only README.md** - Single comprehensive file in tool directory
 
-**Documentation Structure:**
+**Content Structure:**
 ```
 src/tools/$1/README.md
-├── Overview
-├── Features
-├── Usage Instructions
-├── Component API
-├── Architecture Details
-├── Integration Points
-├── Testing Guide
-└── Contributing Guidelines
+├── Tool overview and features
+├── Quick start guide
+├── Architecture patterns used
+├── Basic usage examples
+├── File structure
+├── Extension guide
+└── Integration info
 ```
 
-**Content Requirements:**
-- Clear feature descriptions with examples
-- Component prop interfaces and usage
-- Strategy pattern implementations
-- Command pattern usage
-- Event integration examples
-- Testing approach and examples
-- Troubleshooting guide
-
-**Additional Documentation:**
-- Update main project documentation
-- Add tool to registry documentation
-- Create usage examples in docs/examples/
-- Update development workflow docs
+**Requirements:**
+- Keep documentation concise and focused
+- Include essential usage examples
+- Document architecture patterns (Strategy/Command)
+- Show basic integration approach
+- Provide extension examples
 
 **Output:**
-- Complete README.md for the tool
-- Updated project-level documentation
-- Integration examples and guides
-- Development workflow updates
+- Single README.md file in tool directory
+- Update docs/tools.md registry with tool status
 
-Please analyze the specified tool and generate comprehensive, maintainable documentation following the project's documentation standards.
+**Important:**
+- Only create README.md - no additional documentation files
+- Keep content essential and avoid verbose explanations
+- Focus on practical usage and understanding
+
+Please analyze the specified tool and generate a single, well-structured README.md file with essential documentation.
