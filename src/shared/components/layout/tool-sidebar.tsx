@@ -12,7 +12,7 @@ export const ToolSidebar: React.FC = () => {
       <div className="p-4">
         <h2 className="font-semibold mb-4">Available Tools</h2>
         <Separator className="mb-4" />
-        <div className="space-y-2">
+        <div className="space-y-3">
           {availableTools.map((tool) => (
             <Card
               key={tool.id}

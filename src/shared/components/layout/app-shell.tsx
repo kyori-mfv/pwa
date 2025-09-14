@@ -1,3 +1,4 @@
+import { Toaster } from "@/shared/components/ui/sonner";
 import type React from "react";
 import { AppHeader } from "./app-header";
 import { MainContent } from "./main-content";
@@ -11,6 +12,7 @@ export const AppShell: React.FC = () => {
         <ToolSidebar />
         <MainContent />
       </div>
+      <Toaster richColors />
     </div>
   );
 };

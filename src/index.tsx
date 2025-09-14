@@ -9,6 +9,7 @@ import "./index.css";
 
 // Register tools
 import "@/tools/json-formatter";
+import "@/tools/indexeddb-crud";
 
 // Register service worker
 const updateSW = registerSW({
