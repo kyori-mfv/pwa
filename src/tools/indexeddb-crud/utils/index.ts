@@ -1,1 +1,1 @@
-export * from "./indexeddb";
+export * from "./dexie-db";

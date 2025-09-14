@@ -5,12 +5,15 @@ import { Database, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useIndexedDb } from "../hooks";
 import type { IndexedDbState } from "../types";
+import type { DynamicDatabase, ObjectStoreDefinition } from "../utils/dexie-db";
 import { AddRecordForm } from "./add-record-form";
+import { CreateDatabaseDialog } from "./create-database-dialog";
+import { CreateObjectStoreDialog } from "./create-object-store-dialog";
 import { DatabaseSelector } from "./database-selector";
 import { RecordsTable } from "./records-table";
 
 export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
-  const [currentDb, setCurrentDb] = useState<IDBDatabase | null>(null);
+  const [currentDb, setCurrentDb] = useState<DynamicDatabase | null>(null);
   const [jsonInput, setJsonInput] = useState('{"name": "John", "age": 30}');
 
   const {
@@ -18,6 +21,9 @@ export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
     openDatabase,
     loadRecords,
     createDatabase,
+    createObjectStoreInDatabase,
+    deleteDatabaseByName,
+    deleteObjectStoreFromDatabase,
     addRecord,
     updateRecord,
     deleteRecord,
@@ -45,20 +51,31 @@ export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
   // Open selected database
   useEffect(() => {
     const openDb = async () => {
-      if (!toolState.selectedDatabase) return;
+      if (!toolState.selectedDatabase) {
+        if (currentDb) {
+          currentDb.close();
+          setCurrentDb(null);
+        }
+        return;
+      }
+
+      // Don't reopen the same database
+      if (currentDb && currentDb.name === toolState.selectedDatabase) {
+        return;
+      }
 
       const result = await openDatabase(toolState.selectedDatabase);
       if (result) {
         setCurrentDb(result.db);
-        setToolState({
-          databases: toolState.databases.map((d) =>
+        setToolState((prevState) => ({
+          databases: prevState.databases.map((d) =>
             d.name === toolState.selectedDatabase ? { ...d, objectStores: result.stores } : d
           ),
-        });
+        }));
       }
     };
     openDb();
-  }, [toolState.selectedDatabase, openDatabase, toolState.databases, setToolState]);
+  }, [toolState.selectedDatabase, openDatabase, setToolState, currentDb]);
 
   // Load records when store changes
   useEffect(() => {
@@ -79,11 +96,86 @@ export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
     setToolState({ selectedStore: value, records: [] });
   };
 
-  const handleCreateDatabase = async () => {
-    const newDbName = await createDatabase();
+  const handleCreateDatabase = async (data: { name: string; version: number }) => {
+    const newDbName = await createDatabase(data);
     if (newDbName) {
+      let databases = await loadDatabases();
+
+      // Fallback: if the new database isn't found in the list, add it manually
+      if (!databases.find((db) => db.name === newDbName)) {
+        databases = [
+          ...databases,
+          {
+            name: newDbName,
+            version: data.version,
+            objectStores: [], // Empty database - no object stores yet
+          },
+        ];
+      }
+
+      setToolState({
+        ...toolState,
+        databases,
+        selectedDatabase: newDbName,
+        selectedStore: "",
+        records: [],
+      });
+    }
+  };
+
+  const handleCreateObjectStore = async (data: ObjectStoreDefinition) => {
+    if (!toolState.selectedDatabase) return;
+
+    // Close current database connection to avoid blocking the upgrade
+    if (currentDb) {
+      console.log("Closing current database connection before object store creation");
+      currentDb.close();
+      setCurrentDb(null);
+    }
+
+    const success = await createObjectStoreInDatabase(toolState.selectedDatabase, data);
+    if (success) {
+      // Refresh the database info and reopen the connection
+      const result = await openDatabase(toolState.selectedDatabase);
+      if (result) {
+        setCurrentDb(result.db);
+        setToolState({
+          databases: toolState.databases.map((d) =>
+            d.name === toolState.selectedDatabase ? { ...d, objectStores: result.stores } : d
+          ),
+        });
+      }
+    }
+  };
+
+  const handleDeleteDatabase = async (name: string) => {
+    const success = await deleteDatabaseByName(name);
+    if (success) {
       const databases = await loadDatabases();
-      setToolState({ databases, selectedDatabase: newDbName });
+      setToolState({
+        databases,
+        selectedDatabase: "",
+        selectedStore: "",
+        records: [],
+      });
+    }
+  };
+
+  const handleDeleteObjectStore = async (databaseName: string, name: string) => {
+    const success = await deleteObjectStoreFromDatabase(databaseName, name);
+    if (success) {
+      // Refresh the database info
+      const result = await openDatabase(databaseName);
+      if (result) {
+        setCurrentDb(result.db);
+        setToolState({
+          databases: toolState.databases.map((d) =>
+            d.name === databaseName ? { ...d, objectStores: result.stores } : d
+          ),
+          selectedStore: "",
+          records: [],
+        });
+      }
     }
   };
 
@@ -138,15 +230,27 @@ export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
       </div>
 
       <div className="flex flex-col gap-6">
-        <div className="flex gap-6">
-          <DatabaseSelector
-            databases={toolState.databases}
-            selectedDatabase={toolState.selectedDatabase}
-            selectedStore={toolState.selectedStore}
-            onDatabaseChange={handleDatabaseChange}
-            onStoreChange={handleStoreChange}
-            onCreateDatabase={handleCreateDatabase}
-          />
+        <div className="flex gap-6 flex-wrap">
+          <div className="flex flex-col gap-4">
+            <DatabaseSelector
+              databases={toolState.databases}
+              selectedDatabase={toolState.selectedDatabase}
+              selectedStore={toolState.selectedStore}
+              onDatabaseChange={handleDatabaseChange}
+              onStoreChange={handleStoreChange}
+              onDeleteDatabase={handleDeleteDatabase}
+              onDeleteObjectStore={handleDeleteObjectStore}
+            />
+
+            <div className="flex gap-2">
+              <CreateDatabaseDialog onCreateDatabase={handleCreateDatabase} />
+
+              <CreateObjectStoreDialog
+                onCreateObjectStore={handleCreateObjectStore}
+                disabled={!toolState.selectedDatabase}
+              />
+            </div>
+          </div>
 
           <AddRecordForm
             selectedStore={toolState.selectedStore}

@@ -5,7 +5,7 @@ A simple browser-based tool for managing IndexedDB databases with full CRUD oper
 ## Features
 
 - **Database Management**: Create and select IndexedDB databases
-- **Object Store Operations**: Work with object stores within databases  
+- **Object Store Operations**: Work with object stores within databases
 - **CRUD Operations**: Create, Read, Update, and Delete records with JSON data
 - **Record Filtering**: Search and filter records by content
 - **Inline Editing**: Edit records directly in the table
@@ -15,33 +15,41 @@ A simple browser-based tool for managing IndexedDB databases with full CRUD oper
 ## How to Use
 
 ### 1. Create a Database
+
 - Click "Create Database" button
 - Enter database name and object store name
 - The database will be created with auto-incrementing IDs
 
 ### 2. Select Database & Object Store
+
 - Choose a database from the dropdown (or see "No databases available" text)
 - Select an object store from the dropdown (or see "Select a database first" text)
 
 ### 3. Add Records
+
 - Type JSON data in the textarea (e.g., `{"name": "John", "age": 30}`)
 - Click "Add Record" to save to IndexedDB
 - Invalid JSON will show an error message
 
 ### 4. Filter Records
+
 - Use the search input to filter records by content
 
-### 5. Edit Records  
+### 5. Edit Records
+
 - Click the edit icon to edit records inline
 - Save or cancel changes with the action buttons
 
 ### 6. Delete Records
+
 - Click the trash icon to delete individual records
 
 ## Technical Details
 
-- **Storage**: Uses browser's IndexedDB API
-- **Data Format**: JSON objects with auto-generated IDs  
+- **Storage**: Uses browser's IndexedDB API via Dexie.js wrapper
+- **Database Library**: Dexie.js for simplified IndexedDB operations
+- **Schema Management**: Hybrid approach using Dexie.js + native IndexedDB for reliability
+- **Data Format**: JSON objects with configurable key paths and auto-increment support
 - **Persistence**: Tool state persists across sessions
 - **Error Handling**: Validation and user feedback
 
@@ -70,6 +78,7 @@ src/tools/indexeddb-crud/
 ## Development
 
 The tool follows the established plugin architecture:
+
 - Auto-registers with the tool registry
 - Uses `useToolState` hook for state persistence
 - Implements shadcn/ui components for consistent design
