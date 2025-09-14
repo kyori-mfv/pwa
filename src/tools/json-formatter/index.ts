@@ -1,8 +1,8 @@
 import { toolRegistry } from "@/core/registry/tool-registry";
 import type { ToolPlugin } from "@/shared/types/tool";
-import { JsonFormatterComponent } from "./component";
+import { JsonFormatter } from "./components";
 
-const jsonFormatterPlugin: ToolPlugin = {
+const JsonFormatterPlugin: ToolPlugin = {
   id: "json-formatter",
   metadata: {
     id: "json-formatter",
@@ -12,12 +12,8 @@ const jsonFormatterPlugin: ToolPlugin = {
     version: "1.0.0",
     icon: "{ }",
   },
-  component: JsonFormatterComponent,
+  component: JsonFormatter,
 };
 
 // Auto-register the plugin
-toolRegistry.register(jsonFormatterPlugin);
-
-export { jsonFormatterPlugin };
-export * from "./component";
-export * from "./strategies";
+toolRegistry.register(JsonFormatterPlugin);
