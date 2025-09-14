@@ -1,9 +1,8 @@
 import { useToolsStore } from "@/app/store/tools-store";
 import { Card } from "@/shared/components/ui/card";
-import { Separator } from "@/shared/components/ui/separator";
 import type React from "react";
 
-export const ToolSidebar: React.FC = () => {
+export const AppSidebar: React.FC = () => {
   const { openTool, getAvailableTools } = useToolsStore();
   const availableTools = getAvailableTools();
 

@@ -1,15 +1,15 @@
 import { useToolsStore } from "@/app/store/tools-store";
 import type React from "react";
-import { InstanceRenderer } from "./instance-renderer";
+import { ToolRenderer } from "./tool-renderer";
 
-export const MainContent: React.FC = () => {
+export const AppBody: React.FC = () => {
   const { activeTools, currentTool } = useToolsStore();
 
   const currentToolInstance = activeTools.find((tool) => tool.id === currentTool);
   return (
     <main className="flex-1 overflow-auto">
       {currentToolInstance ? (
-        <InstanceRenderer
+        <ToolRenderer
           key={currentToolInstance.id}
           instanceId={currentToolInstance.id}
           component={currentToolInstance.plugin.component}
