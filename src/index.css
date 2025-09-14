@@ -156,4 +156,12 @@ body {
   * {
     @apply border-border;
   }
+
+  button {
+    @apply cursor-pointer;
+
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+  }
 }
