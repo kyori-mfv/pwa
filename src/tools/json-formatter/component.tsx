@@ -166,9 +166,9 @@ export const JsonFormatterComponent: React.FC<ToolComponentProps> = ({ instanceI
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                    {strategies.map((strategy) => (
-                      <SelectItem key={strategy.name} value={strategy.name}>
-                        {strategy.name}
+                      {strategies.map((strategy) => (
+                        <SelectItem key={strategy.name} value={strategy.name}>
+                          {strategy.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>

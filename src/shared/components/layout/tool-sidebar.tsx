@@ -8,7 +8,7 @@ export const ToolSidebar: React.FC = () => {
   const availableTools = getAvailableTools();
 
   return (
-    <aside className="w-64 border-r border-border bg-sidebar">
+    <aside className="w-64 border-r bg-sidebar">
       <div className="p-4">
         <h2 className="font-semibold mb-4">Available Tools</h2>
         <Separator className="mb-4" />
