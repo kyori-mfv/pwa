@@ -272,59 +272,39 @@ export const jsonFormatterTool: ToolPlugin = {
 ### 4.1 JSON Tools
 ```bash
 # Week 4.1: JSON Formatter
-/create-tool json-formatter json command,strategy
-/add-strategy json-formatter pretty-print
-/add-strategy json-formatter minify
-/add-strategy json-formatter sort-keys
-/add-command json-formatter format
-/add-command json-formatter validate
+/create-tool json-formatter json
+# Implement pretty-print, minify, sort-keys strategies
+# Add format and validate commands
 
 # Week 4.2: JSON Compare
-/create-tool json-compare json command,observer
-/add-strategy json-compare deep-diff
-/add-strategy json-compare shallow-diff
-/wire-tools json-formatter json-compare json-formatted
+/create-tool json-compare json
+# Implement deep-diff and shallow-diff strategies
+# Wire to json-formatter for formatted output
 ```
 
 ### 4.2 Text Tools
 ```bash
 # Week 5.1: Text Compare
-/create-tool text-compare text command,strategy,state
-/add-strategy text-compare line-diff
-/add-strategy text-compare character-diff
-/add-strategy text-compare word-diff
-/add-state text-compare editing
-/add-state text-compare comparing
-/add-state text-compare reviewing
+/create-tool text-compare text
+# Implement line-diff, character-diff, word-diff strategies
+# Add editing, comparing, reviewing states
 
 # Week 5.2: Text Utilities
-/create-tool text-utils text command,strategy
-/add-strategy text-utils case-convert
-/add-strategy text-utils url-encode
-/add-strategy text-utils base64-encode
+/create-tool text-utils text
+# Implement case-convert, url-encode, base64-encode strategies
 ```
 
 ### 4.3 Database Tools
 ```bash
 # Week 6: SQL Formatter
-/create-tool sql-formatter sql command,strategy
-/add-strategy sql-formatter mysql
-/add-strategy sql-formatter postgresql
-/add-strategy sql-formatter sqlite
-/add-command sql-formatter format
-/add-command sql-formatter validate
-/add-command sql-formatter optimize
+/create-tool sql-formatter sql
+# Implement mysql, postgresql, sqlite strategies
+# Add format, validate, optimize commands
 
-# Week 4.3: IndexedDB CRUD Tool (Next Priority - Learning-focused)
-/create-tool indexeddb-crud database command,strategy,observer
-/add-strategy indexeddb-crud standard-crud
-/add-strategy indexeddb-crud transaction-manager
-/add-strategy indexeddb-crud query-builder
-/add-command indexeddb-crud create-database
-/add-command indexeddb-crud manage-schema
-/add-command indexeddb-crud crud-operations
-/add-command indexeddb-crud query-data
-/add-observer indexeddb-crud performance-monitor
+# IndexedDB CRUD Tool (Completed - Learning-focused)
+✅ Completed - IndexedDB CRUD tool with Dexie.js integration
+# Features: database management, object store creation, CRUD operations
+# Architecture: Hybrid Dexie.js + native IndexedDB approach
 ```
 
 ## Phase 5: Advanced Features (Week 7-8)

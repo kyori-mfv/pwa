@@ -140,7 +140,7 @@ const [state, setState] = useToolState<MyState>(instanceId, initialState);
 
 ### Adding Features
 ```bash
-/add-strategy <tool> <algorithm>    # New processing option  
+# Modify tools directly by editing their code
 # Add more strategies as needed
 ```
 

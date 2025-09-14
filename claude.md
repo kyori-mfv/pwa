@@ -84,13 +84,6 @@ Create new tool with architectural patterns
 # Use: Starting new tool development
 ```
 
-#### /add-strategy <tool> <strategy>
-Add strategy pattern to existing tool
-```bash
-# Usage: /add-strategy json-formatter pretty-print
-# Creates: Strategy implementation + UI integration
-# Use: Adding algorithm variations to tools
-```
 
 ### Quality Assurance Commands
 
@@ -184,7 +177,7 @@ Analyze all tools and generate maintenance overview
 # Modify existing tool:
 /read-tool <tool-name>
 /context-quick add-feature
-/add-strategy <tool> <strategy>
+[modify tool directly]
 /document-tool <tool-name>
 /quick-verify
 
@@ -244,7 +237,6 @@ After completing ANY task, Claude MUST:
 /context-quick <type>                      # Load context
 /read-tool <name>                          # Understand existing tool
 /create-tool <name> <category>             # New tools
-/add-strategy <tool> <strategy>            # Add features
 /debug-tool <tool> <issue>                 # Fix issues
 /document-tool <name>                      # Generate docs
 /quick-verify                              # Quality check

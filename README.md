@@ -112,8 +112,6 @@ This project is optimized for development with **Claude Code AI**, providing unp
 /create-tool json-minifier json command,strategy
 
 # Add functionality to tools
-/add-strategy json-formatter pretty-print
-/add-command json-formatter validate
 /wire-tools json-formatter text-compare
 
 # Debug existing tools
@@ -144,7 +142,6 @@ This project is optimized for development with **Claude Code AI**, providing unp
 ```bash
 # Create new functionality
 /create-tool <name> <category>   # New tools
-/add-strategy <tool> <strategy>  # Add features
 /debug-tool <tool> <issue>       # Fix problems
 ```
 
@@ -156,9 +153,9 @@ This project is optimized for development with **Claude Code AI**, providing unp
 
 #### 4. **Essential Commands (80/20 Rule)**
 ```bash
-# These 8 commands handle 80% of development work:
+# These 7 commands handle 80% of development work:
 /status-check, /context-quick, /read-tool, /create-tool
-/add-strategy, /debug-tool, /document-tool, /quick-verify
+/debug-tool, /document-tool, /quick-verify
 ```
 
 ### Tool Documentation & Maintenance Commands
@@ -239,7 +236,7 @@ pwa/
 
 1. **Planning**: Use `/next-task` to get priority work
 2. **Context Loading**: Use `/context-quick <type>` for focused context
-3. **Implementation**: Use pattern-based commands (`/create-tool`, `/add-strategy`)
+3. **Implementation**: Use pattern-based commands (`/create-tool`)
 4. **Verification**: Use `/quick-verify` for quality assurance
 5. **Documentation**: Auto-generated via `/end-session`
 

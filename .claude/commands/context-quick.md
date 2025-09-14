@@ -6,9 +6,9 @@ argument-hint: [type]
 Load focused context for: **$1**
 
 **Context Types:**
+
 - `new-tool` - Tool creation patterns and templates
-- `debug` - Debugging conventions and common issues
-- `add-feature` - Feature development patterns
+- `analyze-feature` - Analyze for new feature which fit current situation
 - `architecture` - Core architecture and design patterns
 
 **Usage:** `/context-quick new-tool`
