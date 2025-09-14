@@ -62,4 +62,7 @@ Use `src/tools/_template/` as starting point for new tools.
 - 📋 **Planned**: Scheduled for development
 - ❌ **Deprecated**: No longer maintained
 
-Current status: All tools are **Planned** (initial setup phase)
+## Current Development Focus
+- **Database Tools Ecosystem**: Focus on IndexedDB tooling with CRUD operations and advanced querying
+- **Next Priority**: IndexedDB Query Builder to complement existing CRUD tool
+- **Architecture**: Leveraging shared Dexie.js infrastructure for consistency
