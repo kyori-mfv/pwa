@@ -1,7 +1,8 @@
 /// <reference types="vite-plugin-pwa/client" />
 
 import { registerSW } from "virtual:pwa-register";
-import { AppShell } from "@/shared/components/layout/app-shell";
+import { App } from "@/app";
+import { ThemeProvider } from "@/shared/providers/theme-provider";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -27,7 +28,9 @@ const rootElement = document.getElementById("root");
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <AppShell />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </React.StrictMode>
   );
 }

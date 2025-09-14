@@ -57,7 +57,7 @@ body {
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
 }
 
-.dark {
+[data-theme="dark"] {
   --background: hsl(218 13% 12%);
   --foreground: hsl(0 0% 91%);
   --card: hsl(218 11% 15%);

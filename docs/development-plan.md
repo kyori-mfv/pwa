@@ -408,6 +408,7 @@ pnpm test      # Unit tests
 - ✅ shadcn/ui components installed and configured
 - ✅ Core architecture patterns implemented
 - ✅ Basic app shell and routing working
+- ✅ Theme system (system/dark/light) switching
 
 ### Week 3: Template & First Tool
 - ✅ Tool template with all patterns implemented

@@ -19,6 +19,7 @@ This project is a comprehensive developer tools platform featuring:
 - **JSON Formatter**: ✅ Pretty-print, minify, validate with 4 formatting strategies and undo/redo
 - **Multi-Instance Support**: ✅ Work on multiple tasks simultaneously with independent state
 - **State Persistence**: ✅ Never lose work when switching between tools - state automatically re-served
+- **Theme Support**: ✅ System/dark/light theme switching
 - **JSON Compare**: 🔄 Visual diff with highlighting and merge options (planned)
 - **Text Compare**: 🔄 Line/character/word-level comparison algorithms (planned)
 - **SQL Formatter**: 🔄 Support for MySQL, PostgreSQL, SQLite dialects (planned)
