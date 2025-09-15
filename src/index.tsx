@@ -11,6 +11,7 @@ import "./index.css";
 // Register tools
 import "@/tools/json-formatter";
 import "@/tools/indexeddb-crud";
+import "@/tools/jwt-decoder";
 
 // Register service worker
 const updateSW = registerSW({

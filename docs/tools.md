@@ -28,6 +28,15 @@
   - Location: `src/tools/sql-formatter/`
   - Route: `/tools/sql-formatter`
 
+### Utility Tools
+- **jwt-decoder**: ✅ Decode and validate JSON Web Tokens (JWT)
+  - **Status**: Ready - Fully implemented and tested
+  - **Features**: JWT decoding, claims validation, expiration checking, copy functionality, state persistence
+  - **Architecture**: Plugin Architecture + Composite Pattern + State Management
+  - **Location**: `src/tools/jwt-decoder/`
+  - **Documentation**: [README](../src/tools/jwt-decoder/README.md)
+  - **Version**: 1.0.0
+
 ## Tool Categories
 - `json` - JSON processing tools
 - `text` - Text manipulation tools
