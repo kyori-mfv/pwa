@@ -17,10 +17,13 @@
   - Route: `/tools/json-compare`
 
 ### Text Tools
-- **text-compare**: Line-by-line text comparison
-  - Features: Diff visualization, merge conflicts, multiple algorithms
-  - Location: `src/tools/text-compare/`
-  - Route: `/tools/text-compare`
+- **text-compare**: ✅ Compare two texts with multiple algorithms
+  - **Status**: Ready - Fully implemented and tested
+  - **Features**: 4 comparison strategies (line-by-line, character-level, word-level, side-by-side), real-time highlighting, statistics display, state persistence
+  - **Architecture**: Strategy Pattern + Plugin Architecture + State Management
+  - **Location**: `src/tools/text-compare/`
+  - **Documentation**: [README](../src/tools/text-compare/README.md)
+  - **Version**: 1.0.0
 
 ### SQL Tools
 - **sql-formatter**: Format SQL queries with syntax highlighting
