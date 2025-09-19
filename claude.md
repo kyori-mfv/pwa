@@ -4,8 +4,32 @@
 A PWA containing multiple developer utilities: JSON formatter, JSON compare, text compare, SQL formatter, and more.
 
 ## Quick Commands
-- `pnpm dev` - Start development server
-- `pnpm build` - Production build
+
+### Multi-App Mode (Default)
+- `pnpm dev` - Start development server with all tools
+- `pnpm build` - Production build with all tools
+- `pnpm preview` - Preview production build
+
+### Individual App Mode
+- `pnpm dev:json-formatter` - Start JSON Formatter only
+- `pnpm dev:text-compare` - Start Text Compare only
+- `pnpm dev:indexeddb-crud` - Start IndexedDB CRUD only
+- `pnpm dev:expense-manager` - Start Expense Manager only
+- `pnpm dev:jwt-decoder` - Start JWT Decoder only
+
+- `pnpm build:json-formatter` - Build JSON Formatter only
+- `pnpm build:text-compare` - Build Text Compare only
+- `pnpm build:indexeddb-crud` - Build IndexedDB CRUD only
+- `pnpm build:expense-manager` - Build Expense Manager only
+- `pnpm build:jwt-decoder` - Build JWT Decoder only
+
+- `pnpm preview:json-formatter` - Preview JSON Formatter build
+- `pnpm preview:text-compare` - Preview Text Compare build
+- `pnpm preview:indexeddb-crud` - Preview IndexedDB CRUD build
+- `pnpm preview:expense-manager` - Preview Expense Manager build
+- `pnpm preview:jwt-decoder` - Preview JWT Decoder build
+
+### Quality & Testing
 - `pnpm test` - Run test suite
 - `pnpm lint` - Run biome linting
 - `pnpm format` - Run biome formatting
@@ -24,10 +48,25 @@ A PWA containing multiple developer utilities: JSON formatter, JSON compare, tex
 - **Types**: kebab-case files, PascalCase interfaces
 
 ## Architecture
+
+### Dual-Mode Architecture
+The application supports two deployment modes through environment-based configuration:
+
+1. **Multi-App Mode (Default)**: Full PWA with all tools in tabbed interface
+2. **Individual App Mode**: Single-tool deployment for specific apps
+
+### Directory Structure
 - **Tools**: `src/tools/` - each tool is self-contained module
 - **Shared**: `src/shared/` - common components, hooks, utils
 - **Types**: `src/shared/types/` - global TypeScript definitions
 - **Tests**: `tests/` - organized by feature
+- **App Modes**:
+  - `src/app/multi.tsx` - Multi-app layout and routing
+  - `src/app/individual.tsx` - Individual app bootstrap
+- **Layouts**:
+  - `src/shared/components/layout/app-layout.tsx` - Multi-app layout
+  - `src/shared/components/layout/individual-app-layout.tsx` - Individual app layout
+  - `src/shared/components/layout/app-body.tsx` - Multi-app content area
 
 ## Technology Stack
 - **Package Manager**: pnpm (fast, efficient)
@@ -150,11 +189,11 @@ Analyze all tools and generate maintenance overview
 ```
 
 ## Current Status
-- **Active Tools**: JSON Formatter (with state persistence)
-- **In Development**: [none]
-- **Architecture Features**: ✅ Instance state persistence, ✅ Multi-instance support
+- **Active Tools**: JSON Formatter, Text Compare, IndexedDB CRUD, Expense Manager, JWT Decoder
+- **Architecture Features**: ✅ Dual-mode deployment, ✅ Individual app builds, ✅ Instance state persistence, ✅ Multi-instance support, ✅ Unified header system
+- **Build Modes**: ✅ Multi-app mode, ✅ Individual app mode with bundle optimization
 - **Known Issues**: [none]
-- **Last Modified**: State persistence implementation complete
+- **Last Modified**: Tool type interface refactor (component → body, headerComponent → header)
 
 ## Efficient Development Workflows
 
@@ -244,12 +283,20 @@ After completing ANY task, Claude MUST:
 
 ## Key Files for Context
 - `README.md` - Project overview & Claude Code AI integration guide
+- `vite.config.ts` - Dual-mode build configuration with environment detection
+- `src/index.tsx` - Root-level mode detection and dynamic app loading
 - `src/core/registry/tool-registry.ts` - Plugin system core + state management
-# Command pattern hub and event bus have been removed for simplicity
-- `src/shared/types/tool.ts` - Tool interface definitions + state types
+- `src/shared/types/tool.ts` - Tool interface definitions (body/header properties)
 - `src/shared/hooks/use-tool-state.ts` - Instance state persistence hook
 - `src/app/store/tools-store.ts` - Tool registration + state coordination
-- `src/tools/json-formatter/` - Reference implementation with state persistence
+- **Multi-App Mode**:
+  - `src/app/multi.tsx` - Multi-app bootstrap
+  - `src/shared/components/layout/app-layout.tsx` - Multi-app layout
+  - `src/shared/components/layout/app-body.tsx` - Content area with header support
+- **Individual App Mode**:
+  - `src/app/individual.tsx` - Individual app bootstrap
+  - `src/shared/components/layout/individual-app-layout.tsx` - Individual app layout
+- `src/tools/*/` - Tool implementations with body/header components
 - `docs/development-plan.md` - Complete development roadmap
 - `docs/design-patterns.md` - Architecture patterns overview
 - `docs/instance-state-management.md` - State re-serving implementation guide

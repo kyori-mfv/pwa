@@ -7,7 +7,6 @@ import {
   PrettyFormatStrategy,
   TabFormatStrategy,
 } from "../strategies";
-import { Header } from "./header";
 import { InputPanel } from "./input-panel";
 import { OutputPanel } from "./output-panel";
 
@@ -77,27 +76,23 @@ export const JsonFormatter: React.FC<ToolComponentProps> = ({ instanceId }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <Header />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <InputPanel
+        input={toolState.input}
+        validation={toolState.validation}
+        onInputChange={(value) => setToolState({ input: value })}
+        onValidate={handleValidate}
+        onClear={handleClear}
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <InputPanel
-          input={toolState.input}
-          validation={toolState.validation}
-          onInputChange={(value) => setToolState({ input: value })}
-          onValidate={handleValidate}
-          onClear={handleClear}
-        />
-
-        <OutputPanel
-          output={toolState.output}
-          selectedStrategy={selectedStrategy}
-          strategies={strategies}
-          onStrategyChange={(value) => setToolState({ selectedStrategyName: value })}
-          onFormat={handleFormat}
-          onCopy={handleCopy}
-        />
-      </div>
+      <OutputPanel
+        output={toolState.output}
+        selectedStrategy={selectedStrategy}
+        strategies={strategies}
+        onStrategyChange={(value) => setToolState({ selectedStrategyName: value })}
+        onFormat={handleFormat}
+        onCopy={handleCopy}
+      />
     </div>
   );
 };

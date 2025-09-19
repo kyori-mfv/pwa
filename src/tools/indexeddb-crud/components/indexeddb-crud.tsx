@@ -221,14 +221,6 @@ export const IndexedDbCrud: React.FC<ToolComponentProps> = ({ instanceId }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Database className="h-12 w-12" />
-        <div>
-          <h1 className="text-3xl font-bold">IndexedDB CRUD</h1>
-          <p className="text-muted-foreground">Manage IndexedDB databases and records</p>
-        </div>
-      </div>
-
       <div className="flex flex-col gap-6">
         <div className="flex gap-6 flex-wrap">
           <div className="flex flex-col gap-4">

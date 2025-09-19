@@ -4,11 +4,11 @@ import { AppSidebar } from "@/shared/components/layout/app-sidebar";
 import { Toaster } from "@/shared/components/ui/sonner";
 import type React from "react";
 
-export const App: React.FC = () => {
+export const MultiApp: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <AppHeader />
-      <div className="flex h-[calc(100vh-73px)]">
+      <div className="flex flex-1 overflow-hidden">
         <AppSidebar />
         <AppBody />
       </div>

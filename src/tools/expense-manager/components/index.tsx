@@ -66,48 +66,33 @@ export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => 
   const [toolState, setToolState] = useToolState<ExpenseManagerState>(instanceId, initialState);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-4">
-      <div className="flex flex-col space-y-2">
-        <div>
-          <h1 className="text-3xl font-bold">Quản lý Chi tiêu</h1>
-          <p className="text-muted-foreground">
-            Theo dõi chi tiêu của bạn với AI hỗ trợ nhập liệu tiếng Việt
-          </p>
-        </div>
-      </div>
+    <Tabs defaultValue="input" className="w-full">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="dashboard" className="flex items-center gap-2">
+          <BarChart3 className="h-4 w-4" />
+          Dashboard
+        </TabsTrigger>
+        <TabsTrigger value="input" className="flex items-center gap-2">
+          <Plus className="h-4 w-4" />
+          Thêm chi tiêu
+        </TabsTrigger>
+      </TabsList>
 
-      <Tabs defaultValue="input" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Dashboard
-          </TabsTrigger>
-          <TabsTrigger value="input" className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Thêm chi tiêu
-          </TabsTrigger>
-        </TabsList>
+      <TabsContent value="dashboard" className="space-y-6 mt-6">
+        <ExpenseDashboard toolState={toolState} />
+      </TabsContent>
 
-        <TabsContent value="dashboard" className="space-y-6 mt-6">
-          <ExpenseDashboard toolState={toolState} />
-        </TabsContent>
-
-        <TabsContent value="input" className="mt-6">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="space-y-6">
-              <AIExpenseInput toolState={toolState} setToolState={setToolState} />
-            </div>
-
-            <div className="space-y-6">
-              <RecentExpenses
-                expenses={toolState.expenses}
-                settings={toolState.settings}
-                limit={5}
-              />
-            </div>
+      <TabsContent value="input" className="mt-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
+            <AIExpenseInput toolState={toolState} setToolState={setToolState} />
           </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+
+          <div className="space-y-6">
+            <RecentExpenses expenses={toolState.expenses} settings={toolState.settings} limit={5} />
+          </div>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 };

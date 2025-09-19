@@ -9,7 +9,6 @@ import {
   WordComparisonStrategy,
 } from "../strategies";
 import { ComparisonControls } from "./comparison-controls";
-import { Header } from "./header";
 import { InputPanel } from "./input-panel";
 import { OutputPanel } from "./output-panel";
 
@@ -69,9 +68,7 @@ export const TextCompare: React.FC<ToolComponentProps> = ({ instanceId }) => {
   const isCompareDisabled = !toolState.textA.trim() && !toolState.textB.trim();
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <Header />
-
+    <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <InputPanel
           title="Text A (Original)"

@@ -13,7 +13,7 @@ const JwtDecoderPlugin: ToolPlugin = {
     version: "1.0.0",
     icon: "🔐",
   },
-  component: JwtDecoder,
+  body: JwtDecoder,
 };
 
 // Auto-register the plugin

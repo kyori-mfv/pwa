@@ -1,6 +1,7 @@
 import { toolRegistry } from "@/core/registry/tool-registry";
 import type { ToolPlugin } from "@/shared/types/tool";
 import { ExpenseManager } from "./components";
+import { Header } from "./components/header";
 
 const ExpenseManagerPlugin: ToolPlugin = {
   id: "expense-manager",
@@ -12,7 +13,8 @@ const ExpenseManagerPlugin: ToolPlugin = {
     version: "1.0.0",
     icon: "💰",
   },
-  component: ExpenseManager,
+  body: ExpenseManager,
+  header: Header,
 };
 
 // Auto-register the plugin

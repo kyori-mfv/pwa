@@ -63,7 +63,7 @@ export const ExpenseDashboard: React.FC<ExpenseDashboardProps> = ({ toolState })
   return (
     <div className="space-y-6">
       {/* Date Range Picker and Total Amount */}
-      <div className="flex flex-wrap-reverse justify-between gap-x-6 gap-y-2">
+      <div className="flex flex-wrap-reverse justify-center gap-x-6 gap-y-2">
         <div className="shrink-0 text-center">
           <p className="text-lg font-semibold text-muted-foreground text-center">
             Tổng chi tiêu:{" "}

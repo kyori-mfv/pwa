@@ -17,21 +17,26 @@ This project is a comprehensive developer tools platform featuring:
 
 ### 🛠️ Developer Tools
 - **JSON Formatter**: ✅ Pretty-print, minify, validate with 4 formatting strategies and undo/redo
+- **Text Compare**: ✅ Advanced diff comparison with multiple algorithms and merge capabilities
+- **IndexedDB CRUD**: ✅ Browser database management with visual interface
+- **Expense Manager**: ✅ AI-powered expense tracking with natural language input
+- **JWT Decoder**: ✅ JSON Web Token decoder and validator with comprehensive analysis
 - **Multi-Instance Support**: ✅ Work on multiple tasks simultaneously with independent state
 - **State Persistence**: ✅ Never lose work when switching between tools - state automatically re-served
 - **Theme Support**: ✅ System/dark/light theme switching
-- **JSON Compare**: 🔄 Visual diff with highlighting and merge options (planned)
-- **Text Compare**: 🔄 Line/character/word-level comparison algorithms (planned)
-- **SQL Formatter**: 🔄 Support for MySQL, PostgreSQL, SQLite dialects (planned)
+- **Dual Mode Architecture**: ✅ Full PWA or individual app deployments with bundle optimization
 - **Extensible**: ✅ Plugin-based architecture with Strategy and Command patterns
 
 ### 🏗️ Architecture Highlights
+- **Dual Mode Architecture**: Full PWA or individual app deployments
 - **Plugin System**: Each tool is a self-contained, hot-swappable plugin
 - **Command Pattern**: Full undo/redo support across all operations
 - **Strategy Pattern**: Multiple algorithms per tool with runtime switching
 - **Observer Pattern**: Inter-tool communication and workflow automation
 - **Composite Pattern**: Flexible, reusable UI components
 - **State Management**: ✅ Instance state persistence with automatic re-serving
+- **Bundle Optimization**: Individual builds include only necessary code
+- **Unified Header System**: Flexible header management across deployment modes
 
 ### 💻 Developer Experience
 - **AI-Optimized**: Built for efficient development with Claude Code AI
@@ -70,9 +75,40 @@ pnpm dev
 ```
 
 ### Available Scripts
+
+#### Multi-App Mode (Default)
 ```bash
-pnpm dev          # Start development server
-pnpm build        # Production build
+pnpm dev          # Start development server with all tools
+pnpm build        # Production build with all tools
+pnpm preview      # Preview production build
+```
+
+#### Individual App Mode
+```bash
+# Development
+pnpm dev:json-formatter      # Start JSON Formatter only
+pnpm dev:text-compare        # Start Text Compare only
+pnpm dev:indexeddb-crud      # Start IndexedDB CRUD only
+pnpm dev:expense-manager     # Start Expense Manager only
+pnpm dev:jwt-decoder         # Start JWT Decoder only
+
+# Production Build
+pnpm build:json-formatter    # Build JSON Formatter only
+pnpm build:text-compare      # Build Text Compare only
+pnpm build:indexeddb-crud    # Build IndexedDB CRUD only
+pnpm build:expense-manager   # Build Expense Manager only
+pnpm build:jwt-decoder       # Build JWT Decoder only
+
+# Preview Individual Builds
+pnpm preview:json-formatter  # Preview JSON Formatter build
+pnpm preview:text-compare    # Preview Text Compare build
+pnpm preview:indexeddb-crud  # Preview IndexedDB CRUD build
+pnpm preview:expense-manager # Preview Expense Manager build
+pnpm preview:jwt-decoder     # Preview JWT Decoder build
+```
+
+#### Quality & Testing
+```bash
 pnpm test         # Run test suite
 pnpm lint         # Run biome linting
 pnpm format       # Format code with biome
@@ -192,6 +228,7 @@ pwa/
 │   ├── tools.md               # Tool registry & status
 │   └── verification.md        # Quality assurance guide
 ├── src/
+│   ├── index.tsx              # Root with dual-mode bootstrap
 │   ├── core/                  # Architecture patterns implementation
 │   │   ├── registry/          # Plugin system
 │   │   ├── commands/          # Command pattern
@@ -199,18 +236,24 @@ pwa/
 │   │   └── patterns/          # Pattern utilities
 │   ├── shared/                # Reusable components & services
 │   │   ├── components/        # UI components (shadcn-based)
+│   │   │   └── layout/        # Layout components for both modes
+│   │   │       ├── app-layout.tsx          # Multi-app layout
+│   │   │       ├── individual-app-layout.tsx  # Individual app layout
+│   │   │       └── app-body.tsx            # Multi-app content area
 │   │   ├── hooks/             # Custom React hooks
 │   │   ├── services/          # Business services
-│   │   └── types/             # TypeScript definitions
+│   │   └── types/             # TypeScript definitions (body/header interface)
 │   ├── tools/                 # Developer tools (plugins)
 │   │   ├── json-formatter/    # JSON formatting tool
-│   │   ├── json-compare/      # JSON comparison tool
-│   │   ├── text-compare/      # Text diff tool
-│   │   ├── sql-formatter/     # SQL formatting tool
+│   │   ├── text-compare/      # Text comparison tool
+│   │   ├── indexeddb-crud/    # IndexedDB management tool
+│   │   ├── expense-manager/   # AI expense tracking tool
+│   │   ├── jwt-decoder/       # JWT decoder & validator
 │   │   └── _template/         # Tool template
-│   └── app/                   # Application shell
-│       ├── store/             # Global state (Zustand)
-│       └── router/            # Routing configuration
+│   └── app/                   # Application shells
+│       ├── multi.tsx          # Multi-app mode bootstrap
+│       ├── individual.tsx     # Individual app mode bootstrap
+│       └── store/             # Global state (Zustand)
 └── tests/                     # Test suites organized by feature
 ```
 
@@ -261,16 +304,19 @@ pwa/
 - ✅ Claude Code AI optimization
 
 ### Phase 2: Core Tools (Week 3-6)
-- 🚧 JSON tools (formatter, compare, validate)
-- 📋 Text tools (compare, utilities, transform)
-- 📋 SQL tools (formatter, validator, optimizer)
-- 📋 Tool integration and workflows
+- ✅ JSON tools (formatter, validator with strategies)
+- ✅ Text tools (compare with multiple algorithms)
+- ✅ Database tools (IndexedDB CRUD interface)
+- ✅ Finance tools (AI-powered expense manager)
+- ✅ Security tools (JWT decoder and validator)
 
 ### Phase 3: Advanced Features (Week 7-8)
-- 📋 Performance optimization
-- 📋 Advanced PWA features
+- ✅ Dual-mode architecture (multi-app and individual app deployments)
+- ✅ Bundle optimization for individual apps
+- ✅ Unified header system across deployment modes
+- 📋 Advanced PWA features and service worker optimization
 - 📋 Accessibility improvements
-- 📋 Production deployment
+- 📋 Production deployment strategies
 
 *Legend: ✅ Complete, 🚧 In Progress, 📋 Planned*
 

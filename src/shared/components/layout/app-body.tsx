@@ -6,14 +6,23 @@ export const AppBody: React.FC = () => {
   const { activeTools, currentTool } = useToolsStore();
 
   const currentToolInstance = activeTools.find((tool) => tool.id === currentTool);
+  const HeaderComponent = currentToolInstance?.plugin.header;
+
   return (
     <main className="flex-1 overflow-auto">
       {currentToolInstance ? (
-        <ToolRenderer
-          key={currentToolInstance.id}
-          instanceId={currentToolInstance.id}
-          component={currentToolInstance.plugin.component}
-        />
+        <>
+          {HeaderComponent && (
+            <div className="px-6 pt-6">
+              <HeaderComponent />
+            </div>
+          )}
+          <ToolRenderer
+            key={currentToolInstance.id}
+            instanceId={currentToolInstance.id}
+            component={currentToolInstance.plugin.body}
+          />
+        </>
       ) : (
         <div className="flex items-center justify-center h-full">
           <div className="text-center text-muted-foreground">

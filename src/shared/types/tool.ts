@@ -16,7 +16,8 @@ export interface ToolComponentProps {
 export interface ToolPlugin {
   id: string;
   metadata: ToolMetadata;
-  component: React.ComponentType<ToolComponentProps>;
+  body: React.ComponentType<ToolComponentProps>;
+  header?: React.ComponentType;
 }
 
 export interface ToolInstance {

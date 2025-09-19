@@ -1,6 +1,7 @@
 import { toolRegistry } from "@/core/registry/tool-registry";
 import type { ToolPlugin } from "@/shared/types/tool";
 import { IndexedDbCrud } from "./components";
+import { Header } from "./components/header";
 
 const IndexedDbCrudPlugin: ToolPlugin = {
   id: "indexeddb-crud",
@@ -12,7 +13,8 @@ const IndexedDbCrudPlugin: ToolPlugin = {
     version: "1.0.0",
     icon: "🗄️",
   },
-  component: IndexedDbCrud,
+  body: IndexedDbCrud,
+  header: Header,
 };
 
 // Auto-register the plugin

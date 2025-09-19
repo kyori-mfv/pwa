@@ -7,7 +7,22 @@
   "keywords": ["pwa", "developer-tools", "json-formatter", "text-compare", "sql-formatter"],
   "scripts": {
     "dev": "vite",
+    "dev:json-formatter": "VITE_BUILD_APP_ID=json-formatter vite",
+    "dev:text-compare": "VITE_BUILD_APP_ID=text-compare vite",
+    "dev:indexeddb-crud": "VITE_BUILD_APP_ID=indexeddb-crud vite",
+    "dev:jwt-decoder": "VITE_BUILD_APP_ID=jwt-decoder vite",
+    "dev:expense-manager": "VITE_BUILD_APP_ID=expense-manager vite",
     "build": "vite build",
+    "build:json-formatter": "VITE_BUILD_APP_ID=json-formatter vite build",
+    "build:text-compare": "VITE_BUILD_APP_ID=text-compare vite build",
+    "build:indexeddb-crud": "VITE_BUILD_APP_ID=indexeddb-crud vite build",
+    "build:jwt-decoder": "VITE_BUILD_APP_ID=jwt-decoder vite build",
+    "build:expense-manager": "VITE_BUILD_APP_ID=expense-manager vite build",
+    "preview:json-formatter": "vite preview",
+    "preview:text-compare": "vite preview",
+    "preview:indexeddb-crud": "vite preview",
+    "preview:jwt-decoder": "vite preview",
+    "preview:expense-manager": "vite preview",
     "lint": "biome check .",
     "lint:fix": "biome check . --apply",
     "format": "biome format . --write",
@@ -60,7 +75,7 @@
     "workbox-routing": "^7.1.0",
     "workbox-window": "^7.1.0",
     "zod": "^4.1.8",
-    "zustand": "^5.0.0"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.3",
