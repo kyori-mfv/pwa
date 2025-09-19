@@ -1,10 +1,12 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { useToolState } from "@/shared/hooks/use-tool-state";
 import type { ToolComponentProps } from "@/shared/types/tool";
+import { BarChart3, Plus } from "lucide-react";
 import type { ExpenseManagerState } from "../types";
-import { formatAmount } from "../utils/currency-utils";
 import { DEFAULT_CATEGORIES } from "../utils/default-categories";
+import { ExpenseDashboard } from "./dashboard/expense-dashboard";
 import { AIExpenseInput } from "./input/ai-expense-input";
-import { Badge } from "@/shared/components/ui/badge";
+import { RecentExpenses } from "./shared/recent-expenses";
 
 const initialState: ExpenseManagerState = {
   expenses: [],
@@ -66,60 +68,46 @@ export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-4">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold">Quản lý Chi tiêu</h1>
-        <p className="text-muted-foreground">
-          Theo dõi chi tiêu của bạn với AI hỗ trợ nhập liệu tiếng Việt
-        </p>
+        <div>
+          <h1 className="text-3xl font-bold">Quản lý Chi tiêu</h1>
+          <p className="text-muted-foreground">
+            Theo dõi chi tiêu của bạn với AI hỗ trợ nhập liệu tiếng Việt
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <AIExpenseInput toolState={toolState} setToolState={setToolState} />
-        </div>
+      <Tabs defaultValue="input" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="input" className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Thêm chi tiêu
+          </TabsTrigger>
+        </TabsList>
 
-        <div className="space-y-6">
-          <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Chi tiêu thêm gần đây</h3>
-            {toolState.expenses.length === 0 ? (
-              <p className="text-muted-foreground">
-                Chưa có chi tiêu nào. Hãy bắt đầu thêm chi tiêu đầu tiên bằng tiếng Việt!
-              </p>
-            ) : (
-              <div className="space-y-2">
-                {toolState.expenses.map((expense, index) => (
-                  <div
-                    key={expense.id || index}
-                    className="p-3 bg-muted/50 rounded-md border border-muted"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <p className="font-medium text-sm flex-1 pr-2">
-                          {expense.description}
-                        </p>
-                        <span className="font-bold text-base text-right whitespace-nowrap">
-                          {formatAmount(expense.amount, toolState.settings)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <Badge>
-                          {expense.category}
-                        </Badge>
-                        <span className="font-mono">
-                          {expense.date.toLocaleDateString("vi-VN", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "2-digit"
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+        <TabsContent value="dashboard" className="space-y-6 mt-6">
+          <ExpenseDashboard toolState={toolState} />
+        </TabsContent>
+
+        <TabsContent value="input" className="mt-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <AIExpenseInput toolState={toolState} setToolState={setToolState} />
+            </div>
+
+            <div className="space-y-6">
+              <RecentExpenses
+                expenses={toolState.expenses}
+                settings={toolState.settings}
+                limit={5}
+              />
+            </div>
           </div>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

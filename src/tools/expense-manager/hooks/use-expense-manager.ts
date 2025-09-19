@@ -5,7 +5,7 @@ import type { ExpenseManagerState, ExpenseRecord, ParsedExpense } from "../types
 
 export function useExpenseManager(
   toolState: ExpenseManagerState,
-  setToolState: (
+  setToolState?: (
     newState:
       | Partial<ExpenseManagerState>
       | ((prev: ExpenseManagerState) => Partial<ExpenseManagerState>)
@@ -23,12 +23,12 @@ export function useExpenseManager(
 
         // Load recent expenses from database (efficient, only get what we need)
         const expenses = await ExpenseDB.getRecentCreatedExpenses(10);
-        setToolState({ expenses });
+        setToolState?.({ expenses });
 
         // Load stored API key
         const storedApiKey = await ExpenseDB.getGeminiApiKey();
         if (storedApiKey) {
-          setToolState((prev) => ({
+          setToolState?.((prev) => ({
             aiProviders: prev.aiProviders.map((provider) =>
               provider.id === "gemini"
                 ? { ...provider, apiKey: storedApiKey, enabled: true }
@@ -73,7 +73,7 @@ export function useExpenseManager(
 
         // Refresh recent expenses list from database (efficient, maintains limit)
         const recentExpenses = await ExpenseDB.getRecentCreatedExpenses(10);
-        setToolState((prev) => ({
+        setToolState?.((prev) => ({
           ...prev,
           expenses: recentExpenses,
         }));
@@ -89,12 +89,12 @@ export function useExpenseManager(
 
   // Update expense
   const updateExpense = useCallback(
-    async (id: number, updates: Partial<ExpenseRecord>) => {
+    async (id: string, updates: Partial<ExpenseRecord>) => {
       try {
         await ExpenseDB.updateExpense(id, updates);
 
         // Update local state
-        setToolState((prev) => ({
+        setToolState?.((prev) => ({
           expenses: prev.expenses.map((expense) =>
             expense.id === id ? { ...expense, ...updates, updatedAt: new Date() } : expense
           ),
@@ -109,12 +109,12 @@ export function useExpenseManager(
 
   // Delete expense
   const deleteExpense = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       try {
         await ExpenseDB.deleteExpense(id);
 
         // Update local state
-        setToolState((prev) => ({
+        setToolState?.((prev) => ({
           expenses: prev.expenses.filter((expense) => expense.id !== id),
         }));
       } catch (error) {
@@ -137,7 +137,7 @@ export function useExpenseManager(
         }
       }
 
-      setToolState((prev) => ({
+      setToolState?.((prev) => ({
         aiProviders: prev.aiProviders.map((provider) =>
           provider.id === providerId ? { ...provider, ...config } : provider
         ),
@@ -149,13 +149,52 @@ export function useExpenseManager(
   // Set preferred provider
   const setPreferredProvider = useCallback(
     (providerId: string) => {
-      setToolState((prev) => ({
+      setToolState?.((prev) => ({
         ...prev,
         preferredProvider: providerId,
       }));
     },
     [setToolState]
   );
+
+  // Search expenses with database-level filtering
+  const searchExpenses = useCallback(
+    async (options: {
+      searchTerm?: string;
+      category?: string;
+      startDate?: Date;
+      endDate?: Date;
+      page?: number;
+      limit?: number;
+    }) => {
+      try {
+        const { page = 1, limit = 5 } = options;
+        const offset = (page - 1) * limit;
+
+        const result = await ExpenseDB.searchExpenses({
+          ...options,
+          limit,
+          offset,
+        });
+
+        return result;
+      } catch (error) {
+        console.error("Failed to search expenses:", error);
+        return { expenses: [], total: 0 };
+      }
+    },
+    []
+  );
+
+  // Get category statistics for dashboard
+  const getCategoryStats = useCallback(async (startDate?: Date, endDate?: Date) => {
+    try {
+      return await ExpenseDB.getCategoryStats(startDate, endDate);
+    } catch (error) {
+      console.error("Failed to get category stats:", error);
+      return [];
+    }
+  }, []);
 
   return {
     initializeAI,
@@ -165,6 +204,8 @@ export function useExpenseManager(
     deleteExpense,
     updateAIProvider,
     setPreferredProvider,
+    searchExpenses,
+    getCategoryStats,
     isLoading,
   };
 }

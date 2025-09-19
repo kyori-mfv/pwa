@@ -41,13 +41,13 @@
   - **Version**: 1.0.0
 
 ### Finance Tools
-- **expense-manager**: ✅ Vietnamese AI-powered expense tracking
-  - **Status**: Ready - Fully implemented and tested
-  - **Features**: Gemini AI integration, Vietnamese localization, offline-first database, editable AI preview, smart categorization, mobile-first design
-  - **Architecture**: Strategy Pattern (AI Providers) + Repository Pattern (Database) + Hook Pattern (State Management)
+- **expense-manager**: ✅ AI-powered expense tracking and dashboard
+  - **Status**: Production Ready - Comprehensive feature set with recent component separation improvements
+  - **Features**: AI expense parsing, interactive dashboard, database-level search, mobile responsive design, offline capability
+  - **Architecture**: Hook-based state management + Strategy Pattern (AI Providers) + Repository Pattern (Database) + Component Separation
   - **Location**: `src/tools/expense-manager/`
   - **Documentation**: [README](../src/tools/expense-manager/README.md)
-  - **Version**: 1.0.0
+  - **Version**: 2.0.0
 
 ## Tool Categories
 - `json` - JSON processing tools

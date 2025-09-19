@@ -1,5 +1,5 @@
 export interface ExpenseRecord {
-  id?: number;
+  id?: string;
   amount: number;
   category: string;
   description: string;
@@ -58,6 +58,13 @@ export interface AIProviderConfig {
   };
 }
 
+export interface UserSettings {
+  currency: string;
+  locale: string;
+  theme: string;
+  notifications: boolean;
+}
+
 export interface ExpenseManagerState extends Record<string, unknown> {
   expenses: ExpenseRecord[];
   categories: CategoryRecord[];
@@ -68,12 +75,7 @@ export interface ExpenseManagerState extends Record<string, unknown> {
   };
   aiProviders: AIProviderConfig[];
   preferredProvider?: string;
-  settings: {
-    currency: string;
-    locale: string;
-    theme: string;
-    notifications: boolean;
-  };
+  settings: UserSettings;
 }
 
 export interface ImportResult {

@@ -97,7 +97,7 @@ Quy tắc QUAN TRỌNG:
 - AMOUNT: Trích xuất số tiền chính xác. Chú ý: "100k" = 100000, "1tr" = 1000000
 - DESCRIPTION: *
 - CATEGORY: Chọn danh mục phù hợp nhất từ danh sách
-- DATE: Tính toán ngày chính xác dạng YYYY-MM-DD. Hôm nay là ${new Date().toISOString().split('T')[0]}
+- DATE: Tính toán ngày chính xác dạng YYYY-MM-DD. Hôm nay là ${new Date().toISOString().split("T")[0]}
 - CONFIDENCE: Cao (>0.8) khi thông tin rõ ràng
 
 Đầu vào: "${input}"
