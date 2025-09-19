@@ -25,6 +25,7 @@ This project is a comprehensive developer tools platform featuring:
 - **State Persistence**: ✅ Never lose work when switching between tools - state automatically re-served
 - **Theme Support**: ✅ System/dark/light theme switching
 - **Dual Mode Architecture**: ✅ Full PWA or individual app deployments with bundle optimization
+- **Vercel Ready**: ✅ Individual tools can be deployed to Vercel as standalone apps
 - **Extensible**: ✅ Plugin-based architecture with Strategy and Command patterns
 
 ### 🏗️ Architecture Highlights
@@ -54,6 +55,38 @@ This project is a comprehensive developer tools platform featuring:
 - **Package Manager**: pnpm (fast, efficient)
 - **Git Hooks**: Husky (automated quality checks)
 - **PWA**: Workbox 7 (offline support, caching)
+
+## 🌐 Vercel Deployment
+
+This project supports seamless deployment of individual tools to Vercel, leveraging the dual-mode architecture for optimized, single-purpose applications.
+
+### Deployment Features
+- **Individual App Deployment**: Deploy specific tools as standalone applications
+- **Optimized Bundles**: Only include code for the target application
+- **PWA Support**: Full Progressive Web App capabilities with service worker
+- **Security Headers**: Content security policy, frame options, XSS protection
+- **Caching Strategy**: Static assets cached for 1 year, dynamic content optimized
+- **Environment-Based Builds**: Automatic detection via `VITE_BUILD_APP_ID`
+
+### Configuration Files
+- **`vercel.json`**: Deployment configuration with build commands and environment variables
+- **`.vercelignore`**: Excludes unnecessary files (docs, tests, development files)
+- **Updated `.gitignore`**: Excludes Vercel deployment artifacts
+
+### Quick Deployment
+```bash
+# Deploy to production
+pnpm deploy:prod:expense-manager
+
+# Deploy for preview/testing
+pnpm deploy:preview:expense-manager
+```
+
+### Custom Tool Deployment
+To deploy other individual tools, create similar configurations:
+1. Add deployment scripts to `package.json`
+2. Update `vercel.json` with the appropriate `VITE_BUILD_APP_ID`
+3. Use the corresponding build command (e.g., `pnpm build:json-formatter`)
 
 ## 🚀 Quick Start
 
@@ -114,6 +147,12 @@ pnpm lint         # Run biome linting
 pnpm format       # Format code with biome
 pnpm type-check   # TypeScript checking
 pnpm verify       # Full verification (lint + test + build)
+```
+
+#### Vercel Deployment
+```bash
+pnpm deploy:prod:expense-manager     # Deploy Expense Manager to production
+pnpm deploy:preview:expense-manager  # Deploy Expense Manager for preview
 ```
 
 ## 🤖 Claude Code AI Integration

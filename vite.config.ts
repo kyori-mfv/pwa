@@ -60,6 +60,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+        cleanupOutdatedCaches: true,
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {

@@ -29,7 +29,9 @@
     "type-check": "tsc --noEmit",
     "verify": "pnpm lint && pnpm type-check && pnpm build",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy:prod:expense-manager": "vercel --prod --local-config vercel.json",
+    "deploy:preview:expense-manager": "vercel --local-config vercel.json"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

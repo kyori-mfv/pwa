@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Development
+.env.local
+.env.development
+
+# Build artifacts
+dist/
+dev-dist/
+
+# Logs
+*.log
+logs/
+
+# Editor
+.vscode/
+.idea/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+
+# Docs (not needed for deployment)
+docs/
+
+# Tests
+tests/
+*.test.*
+*.spec.*
+
+# Husky hooks (not needed in deployment)
+.husky/
+
+# Claude AI
+.claude/

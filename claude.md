@@ -36,6 +36,10 @@ A PWA containing multiple developer utilities: JSON formatter, JSON compare, tex
 - `pnpm type-check` - TypeScript checking
 - `pnpm verify` - Full verification suite
 
+### Vercel Deployment
+- `pnpm deploy:prod:expense-manager` - Deploy Expense Manager to production
+- `pnpm deploy:preview:expense-manager` - Deploy Expense Manager for preview
+
 ## File Naming Convention (MANDATORY)
 - **All files and folders**: kebab-case
 - **React components**: kebab-case filename, PascalCase export
@@ -76,6 +80,24 @@ The application supports two deployment modes through environment-based configur
 - **Git Hooks**: Husky (pre-push validation)
 - **State**: Zustand, **Styling**: Tailwind CSS 4
 - **PWA**: Workbox 7, **Testing**: Vitest
+
+## Vercel Deployment Configuration
+
+### Individual App Deployment
+The project supports deploying individual tools to Vercel using the dual-mode architecture:
+
+- **Configuration**: `vercel.json` - Vercel deployment configuration
+- **Environment**: `VITE_BUILD_APP_ID=expense-manager` - Specifies which app to build
+- **Build Command**: `pnpm build:expense-manager` - Individual app build
+- **Output Directory**: `dist/` - Vite build output
+- **Cache Configuration**: Static assets cached for 1 year, service worker no-cache
+- **Security Headers**: Content security, frame options, XSS protection enabled
+- **PWA Support**: Service worker allowed, cleanup enabled for outdated caches
+
+### Deployment Files
+- `.vercelignore` - Files excluded from deployment (docs, tests, development files)
+- `vercel.json` - Vercel platform configuration with environment variables
+- Updated `.gitignore` - Excludes `.vercel` directory from version control
 
 ## AI Commands
 
@@ -284,6 +306,8 @@ After completing ANY task, Claude MUST:
 ## Key Files for Context
 - `README.md` - Project overview & Claude Code AI integration guide
 - `vite.config.ts` - Dual-mode build configuration with environment detection
+- `vercel.json` - Vercel deployment configuration for individual apps
+- `.vercelignore` - Files excluded from Vercel deployment
 - `src/index.tsx` - Root-level mode detection and dynamic app loading
 - `src/core/registry/tool-registry.ts` - Plugin system core + state management
 - `src/shared/types/tool.ts` - Tool interface definitions (body/header properties)
