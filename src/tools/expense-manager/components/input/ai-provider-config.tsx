@@ -38,14 +38,7 @@ export const AIProviderConfig: React.FC<AIProviderConfigProps> = ({
   }
 
   if (isGeminiConfigured) {
-    return (
-      <div className="mb-4 p-3 bg-muted border rounded-lg">
-        <div className="flex items-center gap-2">
-          <Check className="w-4 h-4 text-primary" />
-          <p className="text-sm">Đã cấu hình Gemini API và sẵn sàng sử dụng</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

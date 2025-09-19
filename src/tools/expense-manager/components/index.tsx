@@ -67,7 +67,7 @@ export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => 
 
   return (
     <Tabs defaultValue="input" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-2">
         <TabsTrigger value="dashboard" className="flex items-center gap-2">
           <BarChart3 className="h-4 w-4" />
           Dashboard

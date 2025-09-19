@@ -37,11 +37,9 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
           </span>
         </div>
 
-        <div className="flex flex-col space-y-1 md:flex-row md:justify-between md:items-center md:space-y-0 text-xs text-muted-foreground">
+        <div className="flex text-xs justify-between items-center text-muted-foreground">
           <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="secondary" className="text-xs flex-shrink-0">
-              {expense.category}
-            </Badge>
+            <Badge className="text-xs flex-shrink-0">{expense.category}</Badge>
             {showOriginalInput && expense.originalInput && (
               <span className="italic text-muted-foreground break-words min-w-0">
                 "

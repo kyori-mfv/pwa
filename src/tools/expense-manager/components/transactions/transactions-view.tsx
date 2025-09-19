@@ -69,6 +69,15 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
           onSearchTermChange={setSearchTerm}
           onCategoryChange={setSelectedCategory}
         />
+        {/* Pagination */}
+        <ExpensePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          total={total}
+          itemsPerPage={5}
+          isLoading={isLoading}
+          onPageChange={setCurrentPage}
+        />
         {/* Transaction List */}
         {isLoading && searchResults.length === 0 ? (
           <div className="flex items-center justify-center h-[300px]">
