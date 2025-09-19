@@ -13,6 +13,7 @@ import "@/tools/json-formatter";
 import "@/tools/indexeddb-crud";
 import "@/tools/jwt-decoder";
 import "@/tools/text-compare";
+import "@/tools/expense-manager";
 
 // Register service worker
 const updateSW = registerSW({

@@ -40,11 +40,21 @@
   - **Documentation**: [README](../src/tools/jwt-decoder/README.md)
   - **Version**: 1.0.0
 
+### Finance Tools
+- **expense-manager**: ✅ Vietnamese AI-powered expense tracking
+  - **Status**: Ready - Fully implemented and tested
+  - **Features**: Gemini AI integration, Vietnamese localization, offline-first database, editable AI preview, smart categorization, mobile-first design
+  - **Architecture**: Strategy Pattern (AI Providers) + Repository Pattern (Database) + Hook Pattern (State Management)
+  - **Location**: `src/tools/expense-manager/`
+  - **Documentation**: [README](../src/tools/expense-manager/README.md)
+  - **Version**: 1.0.0
+
 ## Tool Categories
 - `json` - JSON processing tools
 - `text` - Text manipulation tools
 - `sql` - SQL and database tools
 - `utility` - General utilities
+- `finance` - Financial and expense tracking tools
 
 ## Tool Registration
 Tools are registered in `src/app/store/tools-store.ts`:
