@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Textarea } from "@/shared/components/ui/textarea";
 import { Check, Loader2, Wand2 } from "lucide-react";
 import type { ParsedExpense } from "../../types";
 
@@ -27,9 +27,9 @@ export const ExpenseTextInput: React.FC<ExpenseTextInputProps> = ({
     <>
       <div className="space-y-2">
         <Label htmlFor="expense-input">Mô tả chi tiêu của bạn</Label>
-        <Textarea
+        <Input
           id="expense-input"
-          placeholder="Ví dụ: Tôi ăn cơm trưa ở quán cơm tấm hết 45.000đ hôm nay"
+          placeholder="Coffee sáng 50k"
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
           className="min-h-[100px]"

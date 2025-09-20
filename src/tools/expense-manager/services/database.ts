@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
+import { generateUUID } from "../../../shared/utils/uuid";
 import type { BudgetRecord, CategoryRecord, ExpenseRecord } from "../types";
 
 export interface ExpenseDatabase extends Dexie {
@@ -146,7 +147,7 @@ export const ExpenseDB = {
     expense: Omit<ExpenseRecord, "id" | "createdAt" | "updatedAt">
   ): Promise<ExpenseRecord> {
     const now = new Date();
-    const id = crypto.randomUUID();
+    const id = generateUUID();
     const newExpense: ExpenseRecord = {
       ...expense,
       id,
