@@ -6,6 +6,7 @@ import type { ExpenseManagerState } from "../types";
 import { DEFAULT_CATEGORIES } from "../utils/default-categories";
 import { ExpenseDashboard } from "./dashboard/expense-dashboard";
 import { AIExpenseInput } from "./input/ai-expense-input";
+import { ImportExportActions } from "./shared/import-export-actions";
 import { RecentExpenses } from "./shared/recent-expenses";
 
 const initialState: ExpenseManagerState = {
@@ -65,6 +66,11 @@ const initialState: ExpenseManagerState = {
 export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => {
   const [toolState, setToolState] = useToolState<ExpenseManagerState>(instanceId, initialState);
 
+  const handleImportComplete = async () => {
+    // Reload the page data after import - this will trigger useExpenseManager to reload
+    window.location.reload();
+  };
+
   return (
     <Tabs defaultValue="input" className="w-full">
       <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-2">
@@ -83,13 +89,27 @@ export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => 
       </TabsContent>
 
       <TabsContent value="input" className="mt-6">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="space-y-6">
-            <AIExpenseInput toolState={toolState} setToolState={setToolState} />
-          </div>
+        <div className="space-y-6">
+          {/* Main Input Layout */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <AIExpenseInput toolState={toolState} setToolState={setToolState} />
+            </div>
 
-          <div className="space-y-6">
-            <RecentExpenses expenses={toolState.expenses} settings={toolState.settings} limit={5} />
+            <div className="space-y-6">
+              <RecentExpenses
+                expenses={toolState.expenses}
+                settings={toolState.settings}
+                limit={5}
+              />
+            </div>
+          </div>
+          {/* Import/Export Actions */}
+          <div className="flex justify-center">
+            <ImportExportActions
+              expenses={toolState.expenses}
+              onImportComplete={handleImportComplete}
+            />
           </div>
         </div>
       </TabsContent>

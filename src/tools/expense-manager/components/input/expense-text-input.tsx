@@ -29,10 +29,9 @@ export const ExpenseTextInput: React.FC<ExpenseTextInputProps> = ({
         <Label htmlFor="expense-input">Mô tả chi tiêu của bạn</Label>
         <Input
           id="expense-input"
-          placeholder="Coffee sáng 50k"
+          placeholder="Coffee sáng 50k..."
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
-          className="min-h-[100px]"
         />
       </div>
 

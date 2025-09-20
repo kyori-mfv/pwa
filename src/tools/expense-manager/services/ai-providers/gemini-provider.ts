@@ -81,6 +81,7 @@ export class GeminiProvider implements AIProvider {
       "Du lịch",
       "Dịch vụ & Đăng ký",
       "Con cái",
+      "Gia đình",
       "Khác",
     ];
 
@@ -152,6 +153,7 @@ Chỉ trả về JSON:`;
           "du-lich": "Du lịch",
           "dich-vu": "Dịch vụ & Đăng ký",
           "con-cai": "Con cái",
+          "gia-dinh": "Gia đình",
           khac: "Khác",
         };
         category = categoryMap[categoryKey] || "Khác";

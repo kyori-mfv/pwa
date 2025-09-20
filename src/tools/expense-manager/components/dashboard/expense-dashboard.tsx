@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useExpenseManager } from "../../hooks/use-expense-manager";
 import type { ExpenseManagerState } from "../../types";
 import { formatAmount } from "../../utils/currency-utils";
@@ -29,33 +29,33 @@ export const ExpenseDashboard: React.FC<ExpenseDashboardProps> = ({ toolState })
   const { getCategoryStats } = useExpenseManager(toolState);
 
   // Load category statistics from database when date range changes
-  useEffect(() => {
-    const loadCategoryStats = async () => {
-      try {
-        const stats = await getCategoryStats(dateRange.start, dateRange.end);
+  const loadCategoryStats = useCallback(async () => {
+    try {
+      const stats = await getCategoryStats(dateRange.start, dateRange.end);
 
-        // Merge with category metadata (colors, budgets)
-        const enrichedData = stats
-          .map((stat) => {
-            const categoryMeta = toolState.categories.find((cat) => cat.name === stat.category);
-            return {
-              name: stat.category,
-              amount: stat.amount,
-              count: stat.count,
-              color: categoryMeta?.color || "#6b7280",
-              budget: categoryMeta?.budget || 0,
-            };
-          })
-          .filter((item) => item.amount > 0); // Only show categories with expenses
+      // Merge with category metadata (colors, budgets)
+      const enrichedData = stats
+        .map((stat) => {
+          const categoryMeta = toolState.categories.find((cat) => cat.name === stat.category);
+          return {
+            name: stat.category,
+            amount: stat.amount,
+            count: stat.count,
+            color: categoryMeta?.color || "#6b7280",
+            budget: categoryMeta?.budget || 0,
+          };
+        })
+        .filter((item) => item.amount > 0); // Only show categories with expenses
 
-        setCategoryData(enrichedData);
-      } catch (error) {
-        console.error("Failed to load category stats:", error);
-      }
-    };
-
-    loadCategoryStats();
+      setCategoryData(enrichedData);
+    } catch (error) {
+      console.error("Failed to load category stats:", error);
+    }
   }, [dateRange, getCategoryStats, toolState.categories]);
+
+  useEffect(() => {
+    loadCategoryStats();
+  }, [loadCategoryStats]);
 
   // Calculate total amount from category stats
   const totalAmount = categoryData.reduce((sum, category) => sum + category.amount, 0);

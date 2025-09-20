@@ -219,6 +219,13 @@ export const ExpenseDB = {
   async setGeminiApiKey(apiKey: string): Promise<void> {
     await this.setSetting("gemini_api_key", apiKey);
   },
+
+  // Clear all expenses - for cleanup functionality
+  async clearAllExpenses(): Promise<number> {
+    const count = await db.expenses.count();
+    await db.expenses.clear();
+    return count;
+  },
 };
 
 export { db };
