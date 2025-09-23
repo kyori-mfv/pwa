@@ -2,6 +2,23 @@ import { useCallback, useEffect, useState } from "react";
 import type { ExpenseManagerState, ExpenseRecord } from "../types";
 import { useExpenseManager } from "./use-expense-manager";
 
+// Custom debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 interface UseTransactionsSearchOptions {
   toolState: ExpenseManagerState;
   dateRange?: { start: Date; end: Date };
@@ -9,8 +26,8 @@ interface UseTransactionsSearchOptions {
 }
 
 interface SearchFilters {
-  searchTerm: string;
   selectedCategory: string;
+  searchTerm: string;
   currentPage: number;
 }
 
@@ -20,8 +37,8 @@ export function useTransactionsSearch({
   limit = 5,
 }: UseTransactionsSearchOptions) {
   const [filters, setFilters] = useState<SearchFilters>({
-    searchTerm: "",
     selectedCategory: "all",
+    searchTerm: "",
     currentPage: 1,
   });
 
@@ -35,21 +52,23 @@ export function useTransactionsSearch({
     isLoading: false,
   });
 
-  const { searchExpenses } = useExpenseManager(toolState);
+  const { searchExpenses, deleteExpense } = useExpenseManager(toolState);
+
+  // Debounce search term to avoid excessive API calls
+  const debouncedSearchTerm = useDebounce(filters.searchTerm, 300);
 
   // Search function that calls database
   const performSearch = useCallback(
-    async (searchFilters: SearchFilters) => {
+    async (category: string, searchTerm: string, page: number) => {
       setResults((prev) => ({ ...prev, isLoading: true }));
 
       try {
         const result = await searchExpenses({
-          searchTerm: searchFilters.searchTerm.trim() || undefined,
-          category:
-            searchFilters.selectedCategory !== "all" ? searchFilters.selectedCategory : undefined,
+          searchTerm: searchTerm.trim() || undefined,
+          category: category !== "all" ? category : undefined,
           startDate: dateRange?.start,
           endDate: dateRange?.end,
-          page: searchFilters.currentPage,
+          page,
           limit,
         });
 
@@ -70,18 +89,18 @@ export function useTransactionsSearch({
     [searchExpenses, dateRange, limit]
   );
 
-  // Trigger search when filters change
+  // Trigger search when category, debounced search term or pagination changes
   useEffect(() => {
-    performSearch(filters);
-  }, [filters, performSearch]);
+    performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
+  }, [filters.selectedCategory, debouncedSearchTerm, filters.currentPage, performSearch]);
 
-  // Reset page when search term or category changes
+  // Update filters helper
   const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
     setFilters((prev) => {
       const updated = { ...prev, ...newFilters };
 
-      // Reset page if search term or category changed
-      if (newFilters.searchTerm !== undefined || newFilters.selectedCategory !== undefined) {
+      // Reset page if category or search term changed
+      if (newFilters.selectedCategory !== undefined || newFilters.searchTerm !== undefined) {
         updated.currentPage = 1;
       }
 
@@ -90,16 +109,16 @@ export function useTransactionsSearch({
   }, []);
 
   // Helper functions
-  const setSearchTerm = useCallback(
-    (searchTerm: string) => {
-      updateFilters({ searchTerm });
+  const setSelectedCategory = useCallback(
+    (selectedCategory: string) => {
+      updateFilters({ selectedCategory });
     },
     [updateFilters]
   );
 
-  const setSelectedCategory = useCallback(
-    (selectedCategory: string) => {
-      updateFilters({ selectedCategory });
+  const setSearchTerm = useCallback(
+    (searchTerm: string) => {
+      updateFilters({ searchTerm });
     },
     [updateFilters]
   );
@@ -113,29 +132,51 @@ export function useTransactionsSearch({
 
   const clearFilters = useCallback(() => {
     setFilters({
-      searchTerm: "",
       selectedCategory: "all",
+      searchTerm: "",
       currentPage: 1,
     });
   }, []);
 
+  // Remove expense function
+  const removeExpense = useCallback(
+    async (expenseId: string) => {
+      try {
+        await deleteExpense(expenseId);
+        // Refresh search results after deletion
+        performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
+      } catch (error) {
+        console.error("Failed to remove expense:", error);
+        throw error;
+      }
+    },
+    [
+      deleteExpense,
+      filters.selectedCategory,
+      debouncedSearchTerm,
+      filters.currentPage,
+      performSearch,
+    ]
+  );
+
   return {
     // State
-    searchTerm: filters.searchTerm,
     selectedCategory: filters.selectedCategory,
+    searchTerm: filters.searchTerm,
     currentPage: filters.currentPage,
     expenses: results.expenses,
     total: results.total,
     isLoading: results.isLoading,
 
     // Actions
-    setSearchTerm,
     setSelectedCategory,
+    setSearchTerm,
     setCurrentPage,
     clearFilters,
+    removeExpense,
 
     // Computed
     totalPages: Math.ceil(results.total / limit),
-    hasFilters: filters.searchTerm.trim() !== "" || filters.selectedCategory !== "all",
+    hasFilters: filters.selectedCategory !== "all" || filters.searchTerm.trim() !== "",
   };
 }

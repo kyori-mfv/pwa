@@ -25,8 +25,8 @@ export const IndividualAppLayout: React.FC<IndividualAppLayoutProps> = ({ appId 
   const selectedApp = getAvailableTools().find((tool) => tool.id === appId);
   const HeaderComponent = selectedApp?.header;
 
-  if (appInstance) {
-    return (
+  return (
+    appInstance && (
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         {/* Individual App Header */}
         <header className="border-b bg-primary backdrop-blur-sm sticky top-0 z-50 shadow-sm">
@@ -57,40 +57,6 @@ export const IndividualAppLayout: React.FC<IndividualAppLayoutProps> = ({ appId 
 
         <Toaster richColors />
       </div>
-    );
-  }
-
-  // Loading state
-  return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Individual App Header */}
-      <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-3">
-            <div className="text-xl">{selectedApp?.metadata.icon || "🔧"}</div>
-            <div>
-              <h1 className="text-lg font-semibold">{selectedApp?.metadata.name || "App"}</h1>
-              <p className="text-sm text-muted-foreground">
-                {selectedApp?.metadata.description || "Individual app mode"}
-              </p>
-            </div>
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      {/* Loading Content */}
-      <main className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl mb-4">{selectedApp?.metadata.icon || "🔧"}</div>
-          <h1 className="text-2xl font-semibold mb-2">
-            Loading {selectedApp?.metadata.name || "App"}
-          </h1>
-          <p className="text-muted-foreground">Initializing...</p>
-        </div>
-      </main>
-
-      <Toaster richColors />
-    </div>
+    )
   );
 };

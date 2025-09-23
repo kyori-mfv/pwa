@@ -6,9 +6,10 @@ Vietnamese-focused personal expense tracking tool with AI-powered input parsing,
 
 ### Core Functionality
 - **AI-Powered Expense Input**: Natural language processing for Vietnamese expense descriptions
-- **Multi-Category Support**: Pre-configured Vietnamese expense categories with custom category creation
+- **Multi-Category Support**: Pre-configured Vietnamese expense categories with budgets and color coding
 - **Date-Range Analytics**: Interactive dashboard with category-based expense visualization
-- **Real-time Search**: Fast expense searching with category and date filtering
+- **Category Filtering**: Filter expenses by category and date range with pagination
+- **Expense Deletion**: Remove individual expenses with confirmation dialogs
 
 ### Data Management
 - **Import/Export**: Complete data portability with JSON and CSV format support
@@ -35,9 +36,10 @@ Vietnamese-focused personal expense tracking tool with AI-powered input parsing,
 
 ### Viewing Analytics
 1. Switch to **"Dashboard"** tab
-2. Use date range picker to filter expenses
-3. View category breakdown chart and expense trends
-4. Access detailed transaction history
+2. Use date range picker to filter expenses by date range
+3. Select category from dropdown to filter by specific categories
+4. View category breakdown chart and paginated transaction history
+5. Delete individual expenses using the trash icon with confirmation
 
 ### Data Management
 1. Go to **"Thêm chi tiêu"** tab
@@ -133,8 +135,9 @@ The AI understands Vietnamese expense patterns:
 
 ### Performance
 - Efficient database indexing for fast queries
-- Optimized search with compound indexes
-- Lazy loading for large datasets
+- Optimized category filtering with date range queries
+- Pagination for large datasets
+- Memoized components to prevent unnecessary re-renders
 - Background processing for data operations
 
 ### Browser Compatibility
@@ -171,8 +174,19 @@ The AI understands Vietnamese expense patterns:
 ✅ **Mobile Responsive** - Complete mobile interface
 ✅ **Offline Capable** - Full offline functionality with local storage
 
+## Recent Updates
+
+### Latest Changes
+- **Removed Text Search**: Eliminated search input to improve performance and UX
+- **Enhanced Filtering**: Streamlined category-only filtering with better UI
+- **Optimized Rendering**: Separated filter and results components for better performance
+- **Improved Deletion**: Added confirmation dialogs for expense removal
+- **Reduced Bundle Size**: Removed lodash dependency, smaller app footprint
+- **0.5s Debounce**: Previously implemented for search, now removed entirely
+
 ## Version History
 - **v1.0**: Initial release with basic expense tracking
 - **v1.1**: Added AI-powered input parsing
 - **v1.2**: Implemented dashboard analytics
 - **v1.3**: Added comprehensive import/export and cleanup features
+- **v1.4**: optimized performance, added deletion confirmations
