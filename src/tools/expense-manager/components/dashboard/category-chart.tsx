@@ -44,11 +44,6 @@ export const CategoryChart: React.FC<CategoryChartProps> = ({ data, settings }) 
           <p className="font-medium">{data.name}</p>
           <p className="text-sm text-primary">Số tiền: {formatAmount(data.amount, settings)}</p>
           <p className="text-xs text-muted-foreground">{data.count} giao dịch</p>
-          {data.budget > 0 && (
-            <p className="text-xs text-muted-foreground">
-              Ngân sách: {formatAmount(data.budget, settings)}
-            </p>
-          )}
         </div>
       );
     }
@@ -99,7 +94,6 @@ export const CategoryChart: React.FC<CategoryChartProps> = ({ data, settings }) 
         <div className="mt-2 space-y-2 divide-y">
           {data
             .sort((a, b) => b.amount - a.amount)
-            .slice(0, 5)
             .map((category) => (
               <div key={category.name} className="py-2 flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
@@ -112,11 +106,6 @@ export const CategoryChart: React.FC<CategoryChartProps> = ({ data, settings }) 
                 </div>
               </div>
             ))}
-          {data.length > 5 && (
-            <div className="text-xs text-muted-foreground text-center pt-2">
-              +{data.length - 5} danh mục khác
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>
