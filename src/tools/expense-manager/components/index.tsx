@@ -1,16 +1,16 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { useToolState } from "@/shared/hooks/use-tool-state";
 import type { ToolComponentProps } from "@/shared/types/tool";
-import { BarChart3, Plus } from "lucide-react";
+import { useCallback, useState } from "react";
 import type { ExpenseManagerState } from "../types";
 import { DEFAULT_CATEGORIES } from "../utils/default-categories";
 import { ExpenseDashboard } from "./dashboard/expense-dashboard";
-import { AIExpenseInput } from "./input/ai-expense-input";
-import { ImportExportActions } from "./shared/import-export-actions";
-import { RecentExpenses } from "./shared/recent-expenses";
+import { Sidebar, type SidebarView } from "./sidebar/sidebar";
+import { ExpenseView } from "./views/expense-view";
+import { IncomeView } from "./views/income-view";
 
 const initialState: ExpenseManagerState = {
   expenses: [],
+  income: [],
   categories: DEFAULT_CATEGORIES.map((cat) => ({
     ...cat,
     createdAt: new Date(),
@@ -65,54 +65,54 @@ const initialState: ExpenseManagerState = {
 
 export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => {
   const [toolState, setToolState] = useToolState<ExpenseManagerState>(instanceId, initialState);
+  const [currentView, setCurrentView] = useState<SidebarView>("expense");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleImportComplete = async () => {
-    // Reload the page data after import - this will trigger useExpenseManager to reload
-    window.location.reload();
+  // Force refresh function that components can call
+  const forceRefresh = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case "dashboard":
+        return (
+          <ExpenseDashboard
+            key={refreshKey}
+            toolState={toolState}
+            setToolState={setToolState}
+            onRefresh={forceRefresh}
+          />
+        );
+      case "income":
+        return (
+          <IncomeView toolState={toolState} setToolState={setToolState} onRefresh={forceRefresh} />
+        );
+      case "expense":
+        return (
+          <ExpenseView toolState={toolState} setToolState={setToolState} onRefresh={forceRefresh} />
+        );
+      default:
+        return (
+          <ExpenseDashboard
+            key={refreshKey}
+            toolState={toolState}
+            setToolState={setToolState}
+            onRefresh={forceRefresh}
+          />
+        );
+    }
   };
 
   return (
-    <Tabs defaultValue="input" className="w-full">
-      <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-2">
-        <TabsTrigger value="dashboard" className="flex items-center gap-2">
-          <BarChart3 className="h-4 w-4" />
-          Dashboard
-        </TabsTrigger>
-        <TabsTrigger value="input" className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Thêm chi tiêu
-        </TabsTrigger>
-      </TabsList>
+    <div className="flex h-full min-h-[600px]">
+      {/* Sidebar - Desktop only */}
+      <Sidebar currentView={currentView} onViewChange={setCurrentView} />
 
-      <TabsContent value="dashboard" className="space-y-6 mt-6">
-        <ExpenseDashboard toolState={toolState} />
-      </TabsContent>
-
-      <TabsContent value="input" className="mt-6">
-        <div className="space-y-6">
-          {/* Main Input Layout */}
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="space-y-6">
-              <AIExpenseInput toolState={toolState} setToolState={setToolState} />
-            </div>
-
-            <div className="space-y-6">
-              <RecentExpenses
-                expenses={toolState.expenses}
-                settings={toolState.settings}
-                limit={5}
-              />
-            </div>
-          </div>
-          {/* Import/Export Actions */}
-          <div className="flex justify-center">
-            <ImportExportActions
-              expenses={toolState.expenses}
-              onImportComplete={handleImportComplete}
-            />
-          </div>
-        </div>
-      </TabsContent>
-    </Tabs>
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-0 pb-20 lg:pb-6 lg:p-6">{renderCurrentView()}</div>
+      </div>
+    </div>
   );
 };

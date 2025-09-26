@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ExpenseManagerState, ParsedExpense } from "../types";
 import { useAIManager } from "./use-ai-manager";
-import { useExpenseService } from "./use-expense-service";
+import { useIncomeService } from "./use-income-service";
 
-export function useAIExpenseForm(
+export function useAIIncomeForm(
   toolState: ExpenseManagerState,
   setToolState: (
     newState:
@@ -15,7 +15,7 @@ export function useAIExpenseForm(
   const [isProcessing, setIsProcessing] = useState(false);
   const [preview, setPreview] = useState<ParsedExpense | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isSavingExpense, setIsSavingExpense] = useState(false);
+  const [isSavingIncome, setIsSavingIncome] = useState(false);
   const [editablePreview, setEditablePreview] = useState<ParsedExpense | null>(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
@@ -23,7 +23,7 @@ export function useAIExpenseForm(
     toolState,
     setToolState
   );
-  const { addExpense } = useExpenseService(toolState, setToolState);
+  const { addIncome } = useIncomeService(toolState, setToolState);
 
   // Initialize AI providers on mount
   useEffect(() => {
@@ -35,34 +35,34 @@ export function useAIExpenseForm(
     (provider) => provider.id === "gemini" && provider.enabled && provider.apiKey
   );
 
-  const handleParseExpense = useCallback(async () => {
+  const handleParseIncome = useCallback(async () => {
     if (!input.trim()) return;
 
     setIsProcessing(true);
     setError(null);
 
     try {
+      // Use the same parsing logic as expenses
       const parsed = await parseExpense(input);
       setPreview(parsed);
       setEditablePreview(parsed);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to parse expense");
+      setError(err instanceof Error ? err.message : "Failed to parse income");
     } finally {
       setIsProcessing(false);
     }
   }, [input, parseExpense]);
 
-  const handleSaveExpense = useCallback(async () => {
+  const handleSaveIncome = useCallback(async () => {
     if (!editablePreview) return;
 
-    setIsSavingExpense(true);
+    setIsSavingIncome(true);
     try {
-      await addExpense({
+      await addIncome({
         amount: editablePreview.amount,
         category: editablePreview.category,
         description: editablePreview.description,
         date: editablePreview.date || new Date(),
-        type: "expense",
         originalInput: input,
       });
 
@@ -72,11 +72,11 @@ export function useAIExpenseForm(
       setEditablePreview(null);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save expense");
+      setError(err instanceof Error ? err.message : "Failed to save income");
     } finally {
-      setIsSavingExpense(false);
+      setIsSavingIncome(false);
     }
-  }, [editablePreview, input, addExpense]);
+  }, [editablePreview, input, addIncome]);
 
   const handleConfigureGemini = useCallback(
     async (apiKey: string) => {
@@ -102,7 +102,7 @@ export function useAIExpenseForm(
     isProcessing,
     preview,
     error,
-    isSavingExpense,
+    isSavingIncome,
     editablePreview,
     datePickerOpen,
     isLoading,
@@ -115,8 +115,8 @@ export function useAIExpenseForm(
     setDatePickerOpen,
 
     // Actions
-    handleParseExpense,
-    handleSaveExpense,
+    handleParseIncome,
+    handleSaveIncome,
     handleConfigureGemini,
   };
 }

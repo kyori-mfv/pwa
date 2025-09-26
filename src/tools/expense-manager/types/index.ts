@@ -1,19 +1,36 @@
 export interface ExpenseRecord {
-  id?: string;
+  id: string;
   amount: number;
   category: string;
   description: string;
   date: Date;
+  type: "expense";
   originalInput?: string;
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IncomeRecord {
+  id: string;
+  amount: number;
+  category: string;
+  description: string;
+  date: Date;
+  type: "income";
+  originalInput?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// For backward compatibility - union type for components that handle both
+export type TransactionRecord = ExpenseRecord | IncomeRecord;
 
 export interface CategoryRecord {
   id: string;
   name: string;
   icon: string;
   color: string;
+  type: "income" | "expense" | "both";
   budget?: number;
   isDefault: boolean;
   createdAt: Date;
@@ -67,6 +84,7 @@ export interface UserSettings {
 
 export interface ExpenseManagerState extends Record<string, unknown> {
   expenses: ExpenseRecord[];
+  income: IncomeRecord[];
   categories: CategoryRecord[];
   budgets: BudgetRecord[];
   selectedDateRange: {

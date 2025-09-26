@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ExpenseManagerState, ExpenseRecord } from "../types";
-import { useExpenseManager } from "./use-expense-manager";
+import { useExpenseService } from "./use-expense-service";
 
 // Custom debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -23,6 +23,12 @@ interface UseTransactionsSearchOptions {
   toolState: ExpenseManagerState;
   dateRange?: { start: Date; end: Date };
   limit?: number;
+  setToolState?: (
+    newState:
+      | Partial<ExpenseManagerState>
+      | ((prev: ExpenseManagerState) => Partial<ExpenseManagerState>)
+  ) => void;
+  onRefresh?: () => void;
 }
 
 interface SearchFilters {
@@ -35,6 +41,8 @@ export function useTransactionsSearch({
   toolState,
   dateRange,
   limit = 5,
+  setToolState,
+  onRefresh,
 }: UseTransactionsSearchOptions) {
   const [filters, setFilters] = useState<SearchFilters>({
     selectedCategory: "all",
@@ -52,7 +60,7 @@ export function useTransactionsSearch({
     isLoading: false,
   });
 
-  const { searchExpenses, deleteExpense } = useExpenseManager(toolState);
+  const { searchExpenses, deleteExpense } = useExpenseService(toolState, setToolState);
 
   // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(filters.searchTerm, 300);
@@ -145,6 +153,8 @@ export function useTransactionsSearch({
         await deleteExpense(expenseId);
         // Refresh search results after deletion
         performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
+        // Trigger dashboard refresh
+        onRefresh?.();
       } catch (error) {
         console.error("Failed to remove expense:", error);
         throw error;
@@ -156,6 +166,7 @@ export function useTransactionsSearch({
       debouncedSearchTerm,
       filters.currentPage,
       performSearch,
+      onRefresh,
     ]
   );
 

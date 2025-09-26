@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { aiProviderFactory } from "../services/ai-providers";
 import { ExpenseDB } from "../services/database";
-import type { ExpenseManagerState, ExpenseRecord, ParsedExpense } from "../types";
+import type {
+  ExpenseManagerState,
+  ExpenseRecord,
+  ParsedExpense,
+  TransactionRecord,
+} from "../types";
 
 export function useExpenseManager(
   toolState: ExpenseManagerState,
@@ -21,9 +26,19 @@ export function useExpenseManager(
         // Initialize default categories
         await ExpenseDB.initializeDefaultCategories(toolState.categories);
 
+        // Migrate existing expenses to transactions table (one-time migration)
+        const migratedCount = await ExpenseDB.migrateExpensesToTransactions();
+        if (migratedCount > 0) {
+          console.log(`Migrated ${migratedCount} expenses to transactions table`);
+        }
+
         // Load recent expenses from database (efficient, only get what we need)
         const expenses = await ExpenseDB.getRecentCreatedExpenses(10);
-        setToolState?.({ expenses });
+
+        // Load recent transactions for consistent income/expense data
+        const transactions = await ExpenseDB.getRecentTransactions(20);
+
+        setToolState?.({ expenses, transactions });
 
         // Load stored API key
         const storedApiKey = await ExpenseDB.getGeminiApiKey();
@@ -65,17 +80,31 @@ export function useExpenseManager(
     [toolState.preferredProvider]
   );
 
-  // Add expense
+  // Add expense (legacy method, backward compatible)
   const addExpense = useCallback(
     async (expense: Omit<ExpenseRecord, "id" | "createdAt" | "updatedAt">) => {
       try {
+        // Save to legacy expenses table for backward compatibility
         const newExpense = await ExpenseDB.addExpense(expense);
 
-        // Refresh recent expenses list from database (efficient, maintains limit)
+        // Also save to transactions table for consistency with new dashboard
+        await ExpenseDB.addTransaction({
+          amount: expense.amount,
+          category: expense.category,
+          description: expense.description,
+          date: expense.date,
+          type: "expense",
+          originalInput: expense.originalInput,
+        });
+
+        // Refresh both expenses and transactions from database
         const recentExpenses = await ExpenseDB.getRecentCreatedExpenses(10);
+        const recentTransactions = await ExpenseDB.getRecentTransactions(20);
+
         setToolState?.((prev) => ({
           ...prev,
           expenses: recentExpenses,
+          transactions: recentTransactions,
         }));
 
         return newExpense;
@@ -186,7 +215,7 @@ export function useExpenseManager(
     []
   );
 
-  // Get category statistics for dashboard
+  // Get category statistics for dashboard (legacy method)
   const getCategoryStats = useCallback(async (startDate?: Date, endDate?: Date) => {
     try {
       return await ExpenseDB.getCategoryStats(startDate, endDate);

@@ -190,12 +190,12 @@ export const ImportExportActions: React.FC<ImportExportActionsProps> = ({
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-red-800">
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-destructive">
                 <AlertCircle className="h-5 w-5" />
                 <div className="font-medium">Cảnh báo quan trọng</div>
               </div>
-              <div className="text-red-700 text-sm mt-2">
+              <div className="text-destructive text-sm mt-2">
                 • Tất cả {totalExpenseCount} giao dịch sẽ bị xóa vĩnh viễn
                 <br />• Không thể hoàn tác hành động này
                 <br />• Khuyến nghị xuất dữ liệu trước khi xóa

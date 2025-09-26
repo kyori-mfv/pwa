@@ -171,6 +171,7 @@ export const importFromCSV = async (csvContent: string): Promise<ImportResult> =
         amount: Number.parseFloat(row[amountIndex]),
         category: row[categoryIndex].replace(/"/g, ""),
         description: row[descriptionIndex].replace(/"/g, ""),
+        type: "expense",
         originalInput:
           originalInputIndex >= 0 ? row[originalInputIndex]?.replace(/"/g, "") : undefined,
       };
@@ -264,6 +265,7 @@ const validateAndParseExpense = (item: unknown): ExpenseRecord => {
     category: (expense.category as string).trim(),
     description: (expense.description as string).trim(),
     date,
+    type: "expense",
     originalInput: (expense.originalInput as string) || undefined,
     createdAt: expense.createdAt ? new Date(expense.createdAt as string | Date) : now,
     updatedAt: expense.updatedAt ? new Date(expense.updatedAt as string | Date) : now,

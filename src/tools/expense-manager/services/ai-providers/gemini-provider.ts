@@ -70,7 +70,21 @@ export class GeminiProvider implements AIProvider {
   }
 
   private buildPrompt(input: string): string {
-    const categoryNames = [
+    // Income categories
+    const incomeCategories = [
+      "Lương",
+      "Thưởng",
+      "Đầu tư",
+      "Kinh doanh",
+      "Freelance",
+      "Bán hàng",
+      "Cho thuê",
+      "Lãi suất",
+      "Thu nhập khác",
+    ];
+
+    // Expense categories
+    const expenseCategories = [
       "Ăn uống",
       "Di chuyển",
       "Mua sắm",
@@ -85,7 +99,31 @@ export class GeminiProvider implements AIProvider {
       "Khác",
     ];
 
-    return `Phân tích chi tiêu này và trả về CHỈ MỘT đối tượng JSON với cấu trúc sau:
+    // Detect if input is likely income or expense
+    const incomeKeywords = [
+      "lương",
+      "salary",
+      "thưởng",
+      "bonus",
+      "freelance",
+      "thu nhập",
+      "kiếm được",
+      "nhận được",
+      "lãi",
+      "cho thuê",
+      "bán hàng",
+      "đầu tư",
+      "kinh doanh",
+    ];
+    const isLikelyIncome = incomeKeywords.some((keyword) =>
+      input.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    const categoryNames = isLikelyIncome
+      ? [...incomeCategories, ...expenseCategories]
+      : [...expenseCategories, ...incomeCategories];
+
+    return `Phân tích giao dịch tài chính này và trả về CHỈ MỘT đối tượng JSON với cấu trúc sau:
 {
   "amount": number,
   "category": "${categoryNames.join(", ")}",

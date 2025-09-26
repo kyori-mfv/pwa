@@ -10,11 +10,19 @@ import { TransactionsResults } from "./transactions-results";
 interface TransactionsViewProps {
   toolState: ExpenseManagerState;
   dateRange?: { start: Date; end: Date };
+  setToolState?: (
+    newState:
+      | Partial<ExpenseManagerState>
+      | ((prev: ExpenseManagerState) => Partial<ExpenseManagerState>)
+  ) => void;
+  onRefresh?: () => void;
 }
 
 export const TransactionsView: React.FC<TransactionsViewProps> = ({
   toolState,
   dateRange: externalDateRange,
+  setToolState,
+  onRefresh,
 }) => {
   const {
     selectedCategory,
@@ -34,16 +42,21 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
     toolState,
     dateRange: externalDateRange,
     limit: 5,
+    setToolState,
+    onRefresh,
   });
 
   const categories = useMemo(() => {
-    return toolState.categories.map((cat) => cat.name);
+    // Filter to only show expense categories since this is "Thông tin chi tiêu"
+    return toolState.categories
+      .filter((cat) => cat.type === "expense" || cat.type === "both")
+      .map((cat) => cat.name);
   }, [toolState.categories]);
 
   return (
     <Card className="bg-transparent">
       <CardHeader>
-        <CardTitle className="text-lg md:text-xl">Thông tin giao dịch</CardTitle>
+        <CardTitle className="text-lg md:text-xl">Thông tin chi tiêu</CardTitle>
         <div className="mt-1 space-y-1">
           <p className="text-sm text-muted-foreground">{total} giao dịch</p>
           {externalDateRange && (
