@@ -54,7 +54,7 @@ export async function searchExpenses(options: {
   page?: number;
   limit?: number;
 }): Promise<{ expenses: ExpenseRecord[]; total: number }> {
-  const { page, limit = 15, ...otherOptions } = options;
+  const { page, limit = 5, ...otherOptions } = options;
   const offset = page ? (page - 1) * limit : 0;
 
   const result = await ExpenseDB.searchExpenses({

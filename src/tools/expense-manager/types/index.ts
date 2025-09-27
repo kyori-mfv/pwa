@@ -57,7 +57,7 @@ export interface ParsedExpense {
 
 export interface AIProvider {
   name: string;
-  parseExpense(input: string): Promise<ParsedExpense>;
+  parseExpense(input: string, type?: "income" | "expense"): Promise<ParsedExpense>;
   isConfigured(): boolean;
   validateConfig(config: AIProviderConfig): boolean;
 }

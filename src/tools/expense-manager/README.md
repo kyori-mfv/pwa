@@ -22,7 +22,7 @@ Comprehensive personal finance management tool with AI-powered natural language 
 - **Category Analysis**: Visual breakdown by category with interactive charts and budgets
 - **Date Range Filtering**: Flexible date range selection for detailed analysis
 - **Real-time Updates**: Dashboard automatically refreshes when data changes
-- **Transaction History**: Detailed listings with pagination, search, and filter capabilities
+- **Clean Analytics Focus**: Dedicated analytics view without transaction listings for clarity
 
 ### 📱 Responsive Design
 - **Mobile-First Navigation**: Bottom tab navigation for mobile devices
@@ -39,11 +39,13 @@ Comprehensive personal finance management tool with AI-powered natural language 
 - **Loading States**: Smooth loading indicators and transitions
 
 ### 🔧 Advanced Data Management
+- **Component Separation**: Dedicated search and result components for income and expenses
 - **Service Architecture**: Dedicated ExpenseService and IncomeService for clean separation
 - **Real-time Synchronization**: Dashboard updates automatically when transactions change
-- **Import/Export**: Complete data portability with JSON and CSV format support
+- **Isolated Import/Export**: Separate import/export components for income and expense data
+- **Enhanced Filtering**: Advanced filter UI with clear filter functionality
 - **Local Storage**: IndexedDB-based offline data persistence with automatic migration
-- **Clean Architecture**: Separate income and expense services for maintainable codebase
+- **Clean Architecture**: Complete component and data separation for maintainable codebase
 - **Backup & Restore**: Export/import functionality with progress tracking
 
 ### 🔄 Real-time Features
@@ -81,16 +83,20 @@ Comprehensive personal finance management tool with AI-powered natural language 
    - **Tổng chi tiêu**: Total expenses with transaction count
    - **Số dư ròng**: Net balance (positive/negative)
    - **Tỷ lệ tiết kiệm**: Savings rate percentage
-4. Analyze **"Thông tin chi tiêu"** section with search and filters
-5. View category breakdown charts with budget comparisons
-6. Navigate through transactions using pagination
+4. View category breakdown charts with interactive visualization
+5. For detailed transaction management, use dedicated Income/Expense tabs
 
 ### Data Management
-1. Available in both Income and Expense views
-2. Use import/export actions at the bottom:
-   - **Export**: Download all data as JSON/CSV
-   - **Import**: Upload expense data from file with validation
-   - **Progress Tracking**: Real-time import progress with error reporting
+1. Available in both Income and Expense views with dedicated components
+2. **Income Management**: Navigate to "Quản lý Thu nhập" tab
+   - **Search & Filter**: Advanced search with date range and category filtering
+   - **Clear Filters**: One-click filter clearing with "Xóa bộ lọc" button
+   - **Import/Export**: Dedicated income-specific import/export with progress tracking
+3. **Expense Management**: Navigate to "Quản lý Chi tiêu" tab
+   - **Search & Filter**: Advanced search with date range and category filtering
+   - **Clear Filters**: One-click filter clearing with "Xóa bộ lọc" button
+   - **Import/Export**: Dedicated expense-specific import/export with progress tracking
+4. **Data Format**: JSON/CSV support with validation and error reporting
 
 ## Architecture
 
@@ -235,11 +241,20 @@ The AI understands Vietnamese financial patterns:
 
 ## Recent Updates
 
+### Version 4.0 - Component Architecture Refactor & UI Enhancement
+- **✅ Component Separation**: Split unified `transactions-view` into dedicated `expense-search` and `income-search` components
+- **✅ Dedicated Result Components**: Created `income-results` component for better separation of concerns
+- **✅ Enhanced Filter UI**: Added clear filter buttons with "Xóa bộ lọc" functionality across both income and expense views
+- **✅ Dashboard Simplification**: Removed transaction listing from dashboard, focusing on analytics and charts only
+- **✅ Import/Export Isolation**: Complete separation with dedicated `income-import-export-actions` component
+- **✅ Form Type Safety**: Enhanced expense forms with proper `CategoryRecord` typing and category filtering
+- **✅ Context-Aware AI**: AI prompts now provide context-specific category suggestions for income vs expense
+
 ### Version 3.0 - Architecture Modernization & Performance
 - **✅ Eliminated Transactions Table**: Removed unified transactions approach for cleaner architecture
 - **✅ Function-based Services**: Converted static classes to modern functions for better performance
 - **✅ Direct Data Access**: Each service accesses its dedicated table directly
-- **✅ Category Filtering**: "Thông tin chi tiêu" now shows only expense categories
+- **✅ Category Filtering**: "Thông info chi tiêu" now shows only expense categories
 - **✅ TypeScript Compliance**: Full type safety with strict linting rules
 - **✅ Performance Boost**: Faster queries without intermediate transaction layer
 
@@ -265,12 +280,13 @@ The AI understands Vietnamese financial patterns:
 ## Known Issues & Fixes
 
 ### Recently Fixed
-- **✅ Transactions Table Removal**: Eliminated unified transactions table for cleaner data flow
-- **✅ Function-based Architecture**: Converted classes to functions for better linting compliance
-- **✅ Category Filtering**: Fixed expense view to show only expense categories
-- **✅ TypeScript Errors**: Resolved all type safety issues after architecture changes
-- **✅ Performance**: Direct database access improves query speed
-- **✅ Code Quality**: Full biome linting compliance with modern patterns
+- **✅ Component Architecture**: Split unified transaction components into dedicated income/expense components
+- **✅ Dashboard Focus**: Removed transaction listings from dashboard for cleaner analytics focus
+- **✅ Filter Enhancement**: Added clear filter buttons ("Xóa bộ lọc") across all search interfaces
+- **✅ Import/Export Isolation**: Complete separation of income and expense import/export functionality
+- **✅ Form Type Safety**: Enhanced forms with proper CategoryRecord typing and filtering
+- **✅ Context-Aware AI**: AI prompts now provide transaction-type specific category suggestions
+- **✅ UI Consistency**: Standardized search and result patterns across income and expense views
 
 ### Best Practices
 - **Regular Backups**: Export data monthly for safety
@@ -300,17 +316,20 @@ The AI understands Vietnamese financial patterns:
 
 ## Development Status
 
-**✅ Production Ready** - Comprehensive feature set with modernized architecture
+**✅ Production Ready** - Comprehensive feature set with modernized component architecture
+- **✅ Component Separation**: Dedicated components for income and expense management
 - **✅ Function-based Services**: Modern functional architecture for better maintainability
 - **✅ Direct Data Access**: Eliminated transactions table for improved performance
+- **✅ Enhanced UI/UX**: Clear filter buttons and improved search interfaces
 - **✅ Real-time Updates**: Immediate feedback across all components
-- **✅ Data Management**: Complete import/export with progress tracking
+- **✅ Isolated Data Operations**: Separate import/export components for income and expenses
+- **✅ Context-Aware AI**: Type-specific category suggestions and prompts
 - **✅ Vietnamese Support**: Full localization with cultural context
 - **✅ Performance Optimized**: Handles large datasets efficiently with direct table access
 - **✅ Mobile Responsive**: Complete mobile-first interface
 - **✅ Offline Capable**: Full offline functionality with local storage
 - **✅ Type Safety**: Full TypeScript coverage with strict linting
-- **✅ AI Integration**: Multiple provider support with fallbacks
+- **✅ Clean Dashboard**: Analytics-focused dashboard without transaction clutter
 
 ## Support
 
@@ -322,6 +341,6 @@ For technical issues or feature requests:
 
 ---
 
-**Last Updated**: December 2024 - Version 3.0
+**Last Updated**: December 2024 - Version 4.0
 **Compatibility**: Modern browsers with IndexedDB support
 **License**: Internal development tool

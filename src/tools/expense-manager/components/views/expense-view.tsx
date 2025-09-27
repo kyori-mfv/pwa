@@ -1,5 +1,7 @@
 import { TrendingDown } from "lucide-react";
+import { useState } from "react";
 import type { ExpenseManagerState } from "../../types";
+import { ExpenseSearch } from "../expense/expense-search";
 import { AIExpenseInput } from "../input/ai-expense-input";
 import { ImportExportActions } from "../shared/import-export-actions";
 import { RecentTransactions } from "../shared/recent-transactions";
@@ -15,6 +17,12 @@ interface ExpenseViewProps {
 }
 
 export const ExpenseView: React.FC<ExpenseViewProps> = ({ toolState, setToolState, onRefresh }) => {
+  // State for date range in search component
+  const [dateRange, setDateRange] = useState<{ start: Date; end: Date }>({
+    start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    end: new Date(),
+  });
+
   const handleImportComplete = async () => {
     // Trigger refresh instead of full page reload
     if (onRefresh) {
@@ -54,6 +62,17 @@ export const ExpenseView: React.FC<ExpenseViewProps> = ({ toolState, setToolStat
             limit={5}
           />
         </div>
+      </div>
+
+      {/* Expense Search Section */}
+      <div className="mt-8">
+        <ExpenseSearch
+          toolState={toolState}
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+          setToolState={setToolState}
+          onRefresh={onRefresh}
+        />
       </div>
 
       {/* Import/Export Actions */}

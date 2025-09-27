@@ -76,7 +76,9 @@ export const AIExpenseInput: React.FC<AIExpenseInputProps> = ({ toolState, setTo
             <ExpenseEditForm
               editablePreview={editablePreview}
               preview={preview}
-              categories={toolState.categories}
+              categories={toolState.categories.filter(
+                (cat) => cat.type === "expense" || cat.type === "both"
+              )}
               datePickerOpen={datePickerOpen}
               onEditablePreviewChange={setEditablePreview}
               onDatePickerOpenChange={setDatePickerOpen}

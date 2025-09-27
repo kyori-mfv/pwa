@@ -17,12 +17,12 @@ export class GeminiProvider implements AIProvider {
     return !!(config.apiKey && config.apiUrl && config.model);
   }
 
-  async parseExpense(input: string): Promise<ParsedExpense> {
+  async parseExpense(input: string, type?: "income" | "expense"): Promise<ParsedExpense> {
     if (!this.isConfigured()) {
       throw new Error("Gemini provider not configured");
     }
 
-    const prompt = this.buildPrompt(input);
+    const prompt = this.buildPrompt(input, type);
 
     try {
       const response = await fetch(
@@ -69,7 +69,7 @@ export class GeminiProvider implements AIProvider {
     }
   }
 
-  private buildPrompt(input: string): string {
+  private buildPrompt(input: string, type?: "income" | "expense"): string {
     // Income categories
     const incomeCategories = [
       "Lương",
@@ -81,6 +81,7 @@ export class GeminiProvider implements AIProvider {
       "Cho thuê",
       "Lãi suất",
       "Thu nhập khác",
+      "Khác", // Include "Both" category for income
     ];
 
     // Expense categories
@@ -96,37 +97,42 @@ export class GeminiProvider implements AIProvider {
       "Dịch vụ & Đăng ký",
       "Con cái",
       "Gia đình",
-      "Khác",
+      "Khác", // Include "Both" category for expenses
     ];
 
-    // Detect if input is likely income or expense
-    const incomeKeywords = [
-      "lương",
-      "salary",
-      "thưởng",
-      "bonus",
-      "freelance",
-      "thu nhập",
-      "kiếm được",
-      "nhận được",
-      "lãi",
-      "cho thuê",
-      "bán hàng",
-      "đầu tư",
-      "kinh doanh",
-    ];
-    const isLikelyIncome = incomeKeywords.some((keyword) =>
-      input.toLowerCase().includes(keyword.toLowerCase())
-    );
+    // Determine transaction type based on context or keyword detection
+    let transactionType = type;
+    if (!transactionType) {
+      // Fallback to keyword detection if no context provided
+      const incomeKeywords = [
+        "lương",
+        "salary",
+        "thưởng",
+        "bonus",
+        "freelance",
+        "thu nhập",
+        "kiếm được",
+        "nhận được",
+        "lãi",
+        "cho thuê",
+        "bán hàng",
+        "đầu tư",
+        "kinh doanh",
+      ];
+      const isLikelyIncome = incomeKeywords.some((keyword) =>
+        input.toLowerCase().includes(keyword.toLowerCase())
+      );
+      transactionType = isLikelyIncome ? "income" : "expense";
+    }
 
-    const categoryNames = isLikelyIncome
-      ? [...incomeCategories, ...expenseCategories]
-      : [...expenseCategories, ...incomeCategories];
+    // Use only relevant categories based on transaction type
+    const categoryNames = transactionType === "income" ? incomeCategories : expenseCategories;
+    const transactionContext = transactionType === "income" ? "thu nhập" : "chi tiêu";
 
-    return `Phân tích giao dịch tài chính này và trả về CHỈ MỘT đối tượng JSON với cấu trúc sau:
+    return `Phân tích giao dịch ${transactionContext} này và trả về CHỈ MỘT đối tượng JSON với cấu trúc sau:
 {
   "amount": number,
-  "category": "${categoryNames.join(", ")}",
+  "category": "string",
   "description": "string",
   "date": "YYYY-MM-DD",
   "confidence": number (0-1)
@@ -134,11 +140,12 @@ export class GeminiProvider implements AIProvider {
 
 Quy tắc QUAN TRỌNG:
 - AMOUNT: Trích xuất số tiền chính xác. Chú ý: "100k" = 100000, "1tr" = 1000000
-- DESCRIPTION: *
-- CATEGORY: Chọn danh mục phù hợp nhất từ danh sách
+- DESCRIPTION: Mô tả ngắn gọn, rõ ràng về giao dịch ${transactionContext}
+- CATEGORY: Chọn danh mục phù hợp nhất từ danh sách các danh mục ${transactionContext}: [${categoryNames.join(", ")}]
 - DATE: Tính toán ngày chính xác dạng YYYY-MM-DD. Hôm nay là ${new Date().toISOString().split("T")[0]}
-- CONFIDENCE: Cao (>0.8) khi thông tin rõ ràng
+- CONFIDENCE: Cao (>0.8) khi thông tin rõ ràng, thấp (<0.5) khi thông tin mơ hồ
 
+Loại giao dịch: ${transactionType === "income" ? "THU NHẬP" : "CHI TIÊU"}
 Đầu vào: "${input}"
 
 Chỉ trả về JSON:`;

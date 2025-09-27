@@ -49,14 +49,14 @@ export function useAIManager(
 
   // Parse expense with AI
   const parseExpense = useCallback(
-    async (input: string): Promise<ParsedExpense> => {
+    async (input: string, type?: "income" | "expense"): Promise<ParsedExpense> => {
       const provider = aiProviderFactory.getProvider(toolState.preferredProvider);
 
       if (!provider) {
         throw new Error("No AI provider configured");
       }
 
-      return await provider.parseExpense(input);
+      return await provider.parseExpense(input, type);
     },
     [toolState.preferredProvider]
   );

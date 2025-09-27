@@ -49,13 +49,13 @@ export const TransactionItem: React.FC<TransactionItemProps> = memo(
 
     const isIncome = item.type === "income";
     const Icon = isIncome ? TrendingUp : TrendingDown;
-    const amountColor = isIncome ? "text-chart-5" : "text-chart-3";
-    const iconColor = isIncome ? "text-chart-5" : "text-chart-3";
+    const amountColor = isIncome ? "text-chart-5" : "text-primary";
+    const iconColor = isIncome ? "text-chart-5" : "text-primary";
     return (
       <div
         className={`${
           compact ? "p-3" : "p-4"
-        } ${isIncome ? "bg-chart-5/10 border-chart-5/20" : "bg-chart-3/10 border-chart-3/20"} rounded-md border hover:opacity-80 transition-all`}
+        } ${isIncome ? "bg-chart-5/5 border-chart-5/20" : "bg-primary/5 border-primary/20"} rounded-md border hover:opacity-80 transition-all`}
       >
         <div className="space-y-2">
           <div className="flex justify-between items-start gap-2">
@@ -70,7 +70,7 @@ export const TransactionItem: React.FC<TransactionItemProps> = memo(
                   {item.description}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge variant={isIncome ? "default" : "secondary"} className="text-xs">
+                  <Badge variant="default" className="text-xs">
                     {isIncome ? "Thu" : "Chi"}
                   </Badge>
                   <span className="text-xs text-muted-foreground">{item.category}</span>

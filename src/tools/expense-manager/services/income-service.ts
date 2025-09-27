@@ -53,7 +53,7 @@ export async function searchIncome(options: {
   page?: number;
   limit?: number;
 }): Promise<{ income: IncomeRecord[]; total: number }> {
-  const { searchTerm, category, startDate, endDate, limit = 15, page = 1 } = options;
+  const { searchTerm, category, startDate, endDate, limit = 5, page = 1 } = options;
   const actualOffset = (page - 1) * limit;
 
   let query = DatabaseAccess.db.income.orderBy("date").reverse();

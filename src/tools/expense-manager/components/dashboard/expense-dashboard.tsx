@@ -5,24 +5,13 @@ import { useDashboardStats } from "../../hooks/use-dashboard-stats";
 import type { ExpenseManagerState } from "../../types";
 import { formatAmount } from "../../utils/currency-utils";
 import { DateRangePicker } from "../shared/date-range-picker";
-import { TransactionsView } from "../transactions/transactions-view";
 import { CategoryChart } from "./category-chart";
 
 interface ExpenseDashboardProps {
   toolState: ExpenseManagerState;
-  setToolState?: (
-    newState:
-      | Partial<ExpenseManagerState>
-      | ((prev: ExpenseManagerState) => Partial<ExpenseManagerState>)
-  ) => void;
-  onRefresh?: () => void;
 }
 
-export const ExpenseDashboard: React.FC<ExpenseDashboardProps> = ({
-  toolState,
-  setToolState,
-  onRefresh,
-}) => {
+export const ExpenseDashboard: React.FC<ExpenseDashboardProps> = ({ toolState }) => {
   const [dateRange, setDateRange] = useState<{ start: Date; end: Date }>({
     start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     end: new Date(),
@@ -166,21 +155,10 @@ export const ExpenseDashboard: React.FC<ExpenseDashboardProps> = ({
         </Card>
       </div>
 
-      {/* Desktop 2-Column Layout */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        {/* Left Column - Category Chart (fixed minimum width, no shrinking) */}
-        <div className="w-full lg:w-96 lg:min-w-[24rem] lg:flex-shrink-0">
+      {/* Category Chart */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-4xl">
           <CategoryChart data={categoryData} settings={toolState.settings} />
-        </div>
-
-        {/* Right Column - Transactions (flexible width) */}
-        <div className="w-full lg:flex-1 lg:min-w-0">
-          <TransactionsView
-            toolState={toolState}
-            dateRange={dateRange}
-            setToolState={setToolState}
-            onRefresh={() => loadFinancialData()}
-          />
         </div>
       </div>
     </div>

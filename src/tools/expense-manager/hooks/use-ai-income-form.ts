@@ -42,8 +42,8 @@ export function useAIIncomeForm(
     setError(null);
 
     try {
-      // Use the same parsing logic as expenses
-      const parsed = await parseExpense(input);
+      // Use the same parsing logic but specify income context
+      const parsed = await parseExpense(input, "income");
       setPreview(parsed);
       setEditablePreview(parsed);
     } catch (err) {

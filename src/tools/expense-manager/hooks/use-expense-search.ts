@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ExpenseManagerState, ExpenseRecord } from "../types";
 import { useExpenseService } from "./use-expense-service";
 
@@ -19,7 +19,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-interface UseTransactionsSearchOptions {
+interface UseExpenseSearchOptions {
   toolState: ExpenseManagerState;
   dateRange?: { start: Date; end: Date };
   limit?: number;
@@ -37,18 +37,20 @@ interface SearchFilters {
   currentPage: number;
 }
 
-export function useTransactionsSearch({
+export function useExpenseSearch({
   toolState,
   dateRange,
   limit = 5,
   setToolState,
   onRefresh,
-}: UseTransactionsSearchOptions) {
+}: UseExpenseSearchOptions) {
   const [filters, setFilters] = useState<SearchFilters>({
     selectedCategory: "all",
     searchTerm: "",
     currentPage: 1,
   });
+
+  const previousExpenseLength = useRef<number>(toolState.expenses?.length || 0);
 
   const [results, setResults] = useState<{
     expenses: ExpenseRecord[];
@@ -102,6 +104,22 @@ export function useTransactionsSearch({
     performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
   }, [filters.selectedCategory, debouncedSearchTerm, filters.currentPage, performSearch]);
 
+  // Watch for changes in expense data length and refresh search
+  useEffect(() => {
+    const currentExpenseLength = toolState.expenses?.length || 0;
+    if (previousExpenseLength.current !== currentExpenseLength) {
+      previousExpenseLength.current = currentExpenseLength;
+      // Refresh search results when data changes
+      performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
+    }
+  }, [
+    toolState.expenses?.length,
+    performSearch,
+    filters.selectedCategory,
+    debouncedSearchTerm,
+    filters.currentPage,
+  ]);
+
   // Update filters helper
   const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
     setFilters((prev) => {
@@ -153,7 +171,7 @@ export function useTransactionsSearch({
         await deleteExpense(expenseId);
         // Refresh search results after deletion
         performSearch(filters.selectedCategory, debouncedSearchTerm, filters.currentPage);
-        // Trigger dashboard refresh
+        // Trigger parent refresh
         onRefresh?.();
       } catch (error) {
         console.error("Failed to remove expense:", error);

@@ -10,7 +10,7 @@ import {
 import { Search, X } from "lucide-react";
 import { memo } from "react";
 
-interface ExpenseFiltersProps {
+interface IncomeFiltersProps {
   selectedCategory: string;
   categories: string[];
   searchTerm: string;
@@ -18,7 +18,7 @@ interface ExpenseFiltersProps {
   onSearchChange: (value: string) => void;
 }
 
-export const ExpenseFilters: React.FC<ExpenseFiltersProps> = memo(
+export const IncomeFilters: React.FC<IncomeFiltersProps> = memo(
   ({ selectedCategory, categories, searchTerm, onCategoryChange, onSearchChange }) => {
     const hasActiveFilters = selectedCategory !== "all" || searchTerm.trim() !== "";
 
@@ -33,7 +33,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = memo(
         <div className="relative w-full max-w-xs">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Tìm kiếm giao dịch..."
+            placeholder="Tìm kiếm thu nhập..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10 text-sm"

@@ -76,31 +76,27 @@ export const ExpenseManager: React.FC<ToolComponentProps> = ({ instanceId }) => 
   const renderCurrentView = () => {
     switch (currentView) {
       case "dashboard":
+        return <ExpenseDashboard key={refreshKey} toolState={toolState} />;
+      case "income":
         return (
-          <ExpenseDashboard
+          <IncomeView
             key={refreshKey}
             toolState={toolState}
             setToolState={setToolState}
             onRefresh={forceRefresh}
           />
-        );
-      case "income":
-        return (
-          <IncomeView toolState={toolState} setToolState={setToolState} onRefresh={forceRefresh} />
         );
       case "expense":
         return (
-          <ExpenseView toolState={toolState} setToolState={setToolState} onRefresh={forceRefresh} />
-        );
-      default:
-        return (
-          <ExpenseDashboard
+          <ExpenseView
             key={refreshKey}
             toolState={toolState}
             setToolState={setToolState}
             onRefresh={forceRefresh}
           />
         );
+      default:
+        return <ExpenseDashboard key={refreshKey} toolState={toolState} />;
     }
   };
 

@@ -42,7 +42,7 @@ export function useAIExpenseForm(
     setError(null);
 
     try {
-      const parsed = await parseExpense(input);
+      const parsed = await parseExpense(input, "expense");
       setPreview(parsed);
       setEditablePreview(parsed);
     } catch (err) {

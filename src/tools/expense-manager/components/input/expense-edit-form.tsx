@@ -15,12 +15,12 @@ import {
 import { Textarea } from "@/shared/components/ui/textarea";
 import { vi } from "date-fns/locale";
 import { CalendarDays, DollarSign, FileText, Tag } from "lucide-react";
-import type { ParsedExpense } from "../../types";
+import type { CategoryRecord, ParsedExpense } from "../../types";
 
 interface ExpenseEditFormProps {
   editablePreview: ParsedExpense;
   preview: ParsedExpense | null;
-  categories: Array<{ id: string; name: string }>;
+  categories: CategoryRecord[];
   datePickerOpen: boolean;
   onEditablePreviewChange: (preview: ParsedExpense) => void;
   onDatePickerOpenChange: (open: boolean) => void;
